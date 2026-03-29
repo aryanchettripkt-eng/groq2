@@ -182,14 +182,16 @@ export default function ExtraPages({
                 <h2 className="font-serif text-4xl text-dark-brown italic">Your Curated Albums</h2>
                 <p className="font-hand text-lg text-brown/50 italic">AI-sorted by time, place, and feeling...</p>
               </div>
-              <button 
-                onClick={onSortAlbums}
-                disabled={isSorting}
-                className="bg-sage/10 border border-sage/30 text-moss font-hand text-lg px-6 py-2 rounded-full hover:bg-sage/20 transition-all shadow-sm flex items-center gap-2 disabled:opacity-50"
-              >
-                <Sparkles size={18} className={isSorting ? "animate-spin" : ""} />
-                {isSorting ? "Sorting..." : "Re-sort with AI"}
-              </button>
+              <div className="flex bg-parchment/80 border border-light-brown/20 rounded-full p-0.5 backdrop-blur-md shadow-sm">
+                <button 
+                  onClick={onSortAlbums}
+                  disabled={isSorting}
+                  className="px-6 py-2 rounded-full font-hand text-lg text-moss hover:bg-sage/10 transition-all flex items-center gap-2 disabled:opacity-50"
+                >
+                  <Sparkles size={18} className={isSorting ? "animate-spin" : ""} />
+                  {isSorting ? "Sorting..." : "Re-sort with AI"}
+                </button>
+              </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">

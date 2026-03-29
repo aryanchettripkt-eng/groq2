@@ -931,13 +931,15 @@ export default function Vault({
 
       {/* Top Bar */}
       <div className="fixed top-0 left-0 right-0 z-[1000] p-7 flex items-center justify-between pointer-events-none">
-        <button 
-          onClick={onBack}
-          className="pointer-events-auto flex items-center gap-2 font-hand text-brown/80 hover:text-dark-brown transition-colors"
-        >
-          <ChevronLeft size={18} />
-          back to journal
-        </button>
+        <div className="flex bg-parchment/80 border border-light-brown/20 rounded-full p-0.5 backdrop-blur-md shadow-sm pointer-events-auto">
+          <button 
+            onClick={onBack}
+            className="px-4 py-1.5 rounded-full flex items-center gap-2 font-hand text-sm text-brown/80 hover:bg-brown/10 transition-all"
+          >
+            <ChevronLeft size={18} />
+            back to journal
+          </button>
+        </div>
         <div className="flex gap-3 pointer-events-auto">
           <div className="flex bg-parchment/80 border border-light-brown/20 rounded-full p-0.5 backdrop-blur-md shadow-sm">
             <button 
@@ -953,20 +955,22 @@ export default function Vault({
               Oldest
             </button>
           </div>
-          <button 
-            onClick={() => onSortAlbums()}
-            disabled={isSorting}
-            className="bg-sage/20 border border-sage/30 text-moss font-hand text-sm px-4 py-1.5 rounded-full hover:bg-sage/30 transition-all backdrop-blur-md shadow-sm flex items-center gap-2 disabled:opacity-50"
-          >
-            {isSorting ? (
-              <span className="animate-pulse">Sorting...</span>
-            ) : (
-              <>
-                <Sparkles size={14} />
-                AI Albums
-              </>
-            )}
-          </button>
+          <div className="flex bg-parchment/80 border border-light-brown/20 rounded-full p-0.5 backdrop-blur-md shadow-sm">
+            <button 
+              onClick={() => onSortAlbums()}
+              disabled={isSorting}
+              className="px-4 py-1.5 rounded-full font-hand text-sm text-moss hover:bg-sage/10 transition-all flex items-center gap-2 disabled:opacity-50"
+            >
+              {isSorting ? (
+                <span className="animate-pulse">Sorting...</span>
+              ) : (
+                <>
+                  <Sparkles size={14} />
+                  AI Albums
+                </>
+              )}
+            </button>
+          </div>
         </div>
       </div>
 

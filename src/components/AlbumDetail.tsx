@@ -85,10 +85,12 @@ export default function AlbumDetail({ album, memories, onBack, onUpdateAlbum }: 
       {/* Left Side: Photo Grid */}
       <div className="w-full md:w-1/2 h-full flex flex-col border-r border-light-brown/20 bg-warm-white/30">
         <div className="p-8 pb-4 flex items-center justify-between">
-          <button onClick={onBack} className="flex items-center gap-2 font-hand text-brown/60 hover:text-dark-brown">
+        <div className="flex bg-parchment/80 border border-light-brown/20 rounded-full p-0.5 backdrop-blur-md shadow-sm">
+          <button onClick={onBack} className="px-4 py-1.5 rounded-full flex items-center gap-2 font-hand text-sm text-brown/60 hover:bg-brown/10 hover:text-dark-brown transition-all">
             <ChevronLeft size={18} />
             back to albums
           </button>
+        </div>
           <div className="font-serif text-xl text-dark-brown italic">{album.title}</div>
         </div>
         
