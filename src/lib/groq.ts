@@ -148,6 +148,11 @@ export interface Memory {
 export interface DayReaction {
   date: string;
   emoji: string;
+  journal?: string;
+  music?: {
+    song: string;
+    artist: string;
+  };
 }
 
 export interface Album {

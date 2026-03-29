@@ -41,7 +41,7 @@ interface VaultProps {
   onUpdateAlbumTitle: (albumId: string, newTitle: string) => void;
   onUpdateAlbum: (albumId: string, data: Partial<Album>) => void;
   dayReactions: DayReaction[];
-  onUpdateDayReaction: (date: string, emoji: string) => void;
+  onUpdateDayReaction: (date: string, data: Partial<DayReaction>) => void;
   activeOverlay: string | null;
   onCloseOverlay: () => void;
   onSortAlbums: () => void;

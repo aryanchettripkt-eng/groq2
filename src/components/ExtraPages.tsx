@@ -15,7 +15,7 @@ interface ExtraPagesProps {
   onUpdateAlbumTitle: (albumId: string, newTitle: string) => void;
   onUpdateAlbum: (albumId: string, data: Partial<Album>) => void;
   dayReactions: DayReaction[];
-  onUpdateDayReaction: (date: string, emoji: string) => void;
+  onUpdateDayReaction: (date: string, data: Partial<DayReaction>) => void;
   onSortAlbums: () => void;
   isSorting: boolean;
   onAddMemoryAtDate: (date: string) => void;

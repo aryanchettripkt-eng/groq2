@@ -186,13 +186,13 @@ export default function App() {
     setAlbums(prev => prev.map(a => a.id === albumId ? { ...a, ...data } : a));
   };
 
-  const updateDayReaction = (date: string, emoji: string) => {
+  const updateDayReaction = (date: string, data: Partial<DayReaction>) => {
     setDayReactions(prev => {
       const existing = prev.find(r => r.date === date);
       if (existing) {
-        return prev.map(r => r.date === date ? { ...r, emoji } : r);
+        return prev.map(r => r.date === date ? { ...r, ...data } : r);
       }
-      return [...prev, { date, emoji }];
+      return [...prev, { date, emoji: '✨', ...data }];
     });
   };
 

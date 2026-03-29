@@ -18,7 +18,7 @@ import { Memory, DayReaction } from '../lib/groq';
 interface CalendarViewProps {
   memories: Memory[];
   dayReactions: DayReaction[];
-  onUpdateDayReaction: (date: string, emoji: string) => void;
+  onUpdateDayReaction: (date: string, data: Partial<DayReaction>) => void;
   onClose: () => void;
   onAddMemoryAtDate: (date: string) => void;
 }
@@ -61,7 +61,7 @@ export default function CalendarView({
 
   const selectedDateStr = selectedDate ? `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}` : '';
   const selectedMemories = memories.filter(m => m.date.startsWith(selectedDateStr));
-  const selectedReaction = dayReactions.find(r => r.date === selectedDateStr)?.emoji;
+  const selectedDayData = dayReactions.find(r => r.date === selectedDateStr);
 
   return (
     <motion.div 
@@ -249,12 +249,49 @@ export default function CalendarView({
                     {commonEmojis.map(emoji => (
                       <button
                         key={emoji}
-                        onClick={() => selectedDateStr && onUpdateDayReaction(selectedDateStr, emoji)}
-                        className={`w-10 h-10 rounded-xl flex items-center justify-center text-xl transition-all hover:scale-110 ${selectedReaction === emoji ? 'bg-moss/20 border border-moss/40 scale-110' : 'bg-white/40 border border-transparent hover:bg-white/60'}`}
+                        onClick={() => selectedDateStr && onUpdateDayReaction(selectedDateStr, { emoji })}
+                        className={`w-10 h-10 rounded-xl flex items-center justify-center text-xl transition-all hover:scale-110 ${selectedDayData?.emoji === emoji ? 'bg-moss/20 border border-moss/40 scale-110' : 'bg-white/40 border border-transparent hover:bg-white/60'}`}
                       >
                         {emoji}
                       </button>
                     ))}
+                  </div>
+                </div>
+
+                {/* Day Journal */}
+                <div className="bg-white/40 border border-light-brown/10 rounded-2xl p-4">
+                  <div className="flex items-center gap-3 mb-3">
+                    <BookOpen size={18} className="text-moss" />
+                    <span className="font-hand text-lg text-brown/60">Journal for the day</span>
+                  </div>
+                  <textarea
+                    value={selectedDayData?.journal || ''}
+                    onChange={(e) => selectedDateStr && onUpdateDayReaction(selectedDateStr, { journal: e.target.value })}
+                    className="w-full bg-parchment/20 border border-light-brown/15 rounded-[3px] px-3 py-2 text-ink font-hand outline-none resize-none"
+                    rows={3}
+                    placeholder="Write your thoughts about the entire day..."
+                  />
+                </div>
+
+                {/* Day Music */}
+                <div className="bg-white/40 border border-light-brown/10 rounded-2xl p-4">
+                  <div className="flex items-center gap-3 mb-3">
+                    <MusicIcon size={18} className="text-moss" />
+                    <span className="font-hand text-lg text-brown/60">Song of the day</span>
+                  </div>
+                  <div className="flex gap-2">
+                    <input
+                      value={selectedDayData?.music?.song || ''}
+                      onChange={(e) => selectedDateStr && onUpdateDayReaction(selectedDateStr, { music: { artist: selectedDayData?.music?.artist || '', song: e.target.value } })}
+                      className="flex-1 bg-parchment/20 border border-light-brown/15 rounded-[3px] px-3 py-2 text-ink font-hand outline-none"
+                      placeholder="Song name"
+                    />
+                    <input
+                      value={selectedDayData?.music?.artist || ''}
+                      onChange={(e) => selectedDateStr && onUpdateDayReaction(selectedDateStr, { music: { song: selectedDayData?.music?.song || '', artist: e.target.value } })}
+                      className="flex-1 bg-parchment/20 border border-light-brown/15 rounded-[3px] px-3 py-2 text-ink font-hand outline-none"
+                      placeholder="Artist"
+                    />
                   </div>
                 </div>
 
