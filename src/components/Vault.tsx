@@ -248,12 +248,12 @@ export default function Vault({
     // ══════════════════════════════════════════════════════════
 
     const woodMat = new THREE.MeshStandardMaterial({
-      color: 0x2e1c0e, roughness: 0.88, metalness: 0.04,
-      emissive: new THREE.Color(0x0e0804), emissiveIntensity: 0.06
+      color: 0x4a3220, roughness: 0.88, metalness: 0.04,
+      emissive: new THREE.Color(0x1a120a), emissiveIntensity: 0.2
     });
     const darkWoodMat = new THREE.MeshStandardMaterial({
-      color: 0x1e120a, roughness: 0.9, metalness: 0.02,
-      emissive: new THREE.Color(0x060402), emissiveIntensity: 0.04
+      color: 0x3a2216, roughness: 0.9, metalness: 0.02,
+      emissive: new THREE.Color(0x120a06), emissiveIntensity: 0.15
     });
 
     // ── FLOOR — aged dark wood planks ──
@@ -262,44 +262,44 @@ export default function Vault({
     floor.receiveShadow = true; scene.add(floor);
 
     // ── A-FRAME STRUCTURE ──
-    // Side walls (short because of sloped roof)
-    const sideWallGeo = new THREE.PlaneGeometry(50, 8);
+    // Side walls (pushed wide at x = -18 and 18 to avoid blocking camera/photos)
+    const sideWallGeo = new THREE.PlaneGeometry(50, 16);
     const lw = new THREE.Mesh(sideWallGeo, woodMat);
-    lw.position.set(-10, -1, 0); lw.rotation.y = Math.PI / 2; scene.add(lw);
+    lw.position.set(-18, 0, 0); lw.rotation.y = Math.PI / 2; scene.add(lw);
     const rw = new THREE.Mesh(sideWallGeo, woodMat.clone());
-    rw.position.set(10, -1, 0); rw.rotation.y = -Math.PI / 2; scene.add(rw);
+    rw.position.set(18, 0, 0); rw.rotation.y = -Math.PI / 2; scene.add(rw);
 
     // Back wall
-    const bw = new THREE.Mesh(new THREE.PlaneGeometry(24, 18), woodMat);
+    const bw = new THREE.Mesh(new THREE.PlaneGeometry(36, 18), woodMat);
     bw.position.set(0, 2, -14); bw.receiveShadow = true; scene.add(bw);
 
-    // Sloped A-frame roof panels
-    const roofGeo = new THREE.PlaneGeometry(16, 32);
+    // Sloped A-frame roof panels (pushed wide)
+    const roofGeo = new THREE.PlaneGeometry(22, 32);
     const roofMat = new THREE.MeshStandardMaterial({
-      color: 0x241408, roughness: 0.92,
-      emissive: new THREE.Color(0x060302), emissiveIntensity: 0.03
+      color: 0x442b1a, roughness: 0.92,
+      emissive: new THREE.Color(0x100806), emissiveIntensity: 0.15
     });
     const leftRoof = new THREE.Mesh(roofGeo, roofMat);
-    leftRoof.position.set(-5, 5.5, 0); leftRoof.rotation.z = Math.PI * 0.28;
+    leftRoof.position.set(-10, 8, 0); leftRoof.rotation.z = Math.PI * 0.22;
     leftRoof.rotation.x = 0; scene.add(leftRoof);
     const rightRoof = new THREE.Mesh(roofGeo, roofMat.clone());
-    rightRoof.position.set(5, 5.5, 0); rightRoof.rotation.z = -Math.PI * 0.28;
+    rightRoof.position.set(10, 8, 0); rightRoof.rotation.z = -Math.PI * 0.22;
     scene.add(rightRoof);
 
-    // Exposed A-frame beams (heavy timber)
+    // Exposed A-frame beams (heavy timber, pushed out to match roof)
     const beamMat = new THREE.MeshStandardMaterial({
-      color: 0x3a2412, roughness: 0.82,
-      emissive: new THREE.Color(0x0c0804), emissiveIntensity: 0.08
+      color: 0x4a3220, roughness: 0.82,
+      emissive: new THREE.Color(0x1a120a), emissiveIntensity: 0.15
     });
     // Main ridge beam
     const ridgeBeam = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.35, 34), beamMat);
-    ridgeBeam.position.set(0, 9, 0); scene.add(ridgeBeam);
+    ridgeBeam.position.set(0, 11, 0); scene.add(ridgeBeam);
     // Angled rafters
     for (let rz = -12; rz <= 8; rz += 5) {
-      const lb = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.2, 12), beamMat);
-      lb.position.set(-4.5, 7, rz); lb.rotation.z = Math.PI * 0.22; scene.add(lb);
-      const rb = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.2, 12), beamMat);
-      rb.position.set(4.5, 7, rz); rb.rotation.z = -Math.PI * 0.22; scene.add(rb);
+      const lb = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.2, 16), beamMat);
+      lb.position.set(-7, 8.5, rz); lb.rotation.z = Math.PI * 0.18; scene.add(lb);
+      const rb = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.2, 16), beamMat);
+      rb.position.set(7, 8.5, rz); rb.rotation.z = -Math.PI * 0.18; scene.add(rb);
     }
     // Cross beams
     for (let cbz = -10; cbz <= 6; cbz += 8) {
@@ -336,18 +336,18 @@ export default function Vault({
     vMullion.position.set(-3.95, 6.85, -4); vMullion.rotation.z = Math.PI * 0.25;
     scene.add(vMullion);
 
-    // Dim blue-green light through window (moonlit forest outside)
-    const windowLight = new THREE.PointLight(0x4a7a6a, 1.2, 16);
+    // Dim blue-green light through window (moonlit forest outside) - brighter
+    const windowLight = new THREE.PointLight(0x5aad9a, 2.5, 20);
     windowLight.position.set(-5, 7.5, -4); scene.add(windowLight);
 
-    // ── RAIN PARTICLES (falling past the window) ──
+    // ── RAIN PARTICLES (falling strictly OUTSIDE the window) ──
     const rainCount = 200;
     const rainGeo = new THREE.BufferGeometry();
     const rainPos = new Float32Array(rainCount * 3);
     for (let i = 0; i < rainCount; i++) {
-      rainPos[i*3]   = -7 + Math.random() * 6;
-      rainPos[i*3+1] = Math.random() * 12;
-      rainPos[i*3+2] = -6 + Math.random() * 4;
+      rainPos[i*3]   = -7 + Math.random() * 6; // X covers the window
+      rainPos[i*3+1] = 4 + Math.random() * 8; // Y starts high
+      rainPos[i*3+2] = -4.5 + Math.random() * 0.3; // Z is behind the window at -4
     }
     rainGeo.setAttribute('position', new THREE.BufferAttribute(rainPos, 3));
     const rainMat = new THREE.PointsMaterial({
@@ -499,13 +499,13 @@ export default function Vault({
       scene.add(flame);
     });
 
-    // Candle glow lights
-    const lampLight = new THREE.PointLight(0xffaa30, 3.5, 12);
+    // Candle glow lights - Brighter for warmth
+    const lampLight = new THREE.PointLight(0xffbe60, 5.0, 16);
     lampLight.position.set(3.5, -0.5, -12.5); lampLight.castShadow = true;
     scene.add(lampLight); lampLightRef.current = lampLight;
-    const candleLight2 = new THREE.PointLight(0xffaa30, 2.5, 10);
+    const candleLight2 = new THREE.PointLight(0xffbe60, 3.5, 12);
     candleLight2.position.set(4.8, -3.5, 0.7); scene.add(candleLight2);
-    const candleLight3 = new THREE.PointLight(0xff9920, 1.5, 8);
+    const candleLight3 = new THREE.PointLight(0xffa840, 2.5, 10);
     candleLight3.position.set(-2.5, -0.5, -12.5); scene.add(candleLight3);
 
     // ── FAIRY / STRING LIGHTS in the A-frame peak ──
@@ -598,9 +598,9 @@ export default function Vault({
     scene.children.filter(c => (c as any).isLight).forEach(l => scene.remove(l));
 
     const configs: any = {
-      golden: { ambient: [0xcc7a20, 0.6], dir: [0xffaa40, 0.5], bg: 0x0e0c08, fog: 0x1a1510 },
-      night:  { ambient: [0x1a2040, 0.3], dir: [0x304060, 0.3], bg: 0x060810, fog: 0x101420 },
-      morning:{ ambient: [0xaa6030, 0.5], dir: [0xcc8840, 0.4], bg: 0x0e0c08, fog: 0x1a1510 }
+      golden: { ambient: [0xffaa60, 1.2], dir: [0xffbb60, 1.0], bg: 0x0e0c08, fog: 0x1a1510 },
+      night:  { ambient: [0x5070a0, 0.8], dir: [0x7090bb, 0.7], bg: 0x060810, fog: 0x101420 },
+      morning:{ ambient: [0xffaa70, 1.0], dir: [0xffcc80, 0.9], bg: 0x0e0c08, fog: 0x1a1510 }
     };
 
     const c = configs[mood] || configs.golden;
