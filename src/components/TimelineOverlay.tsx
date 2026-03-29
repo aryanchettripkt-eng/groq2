@@ -3,10 +3,11 @@ import { motion, useScroll, useTransform } from 'motion/react';
 import { Camera as CameraIcon, Heart, Star, Mic, Type } from 'lucide-react';
 import { Memory } from '../lib/groq';
 
-const FilmStrip: React.FC<{ stripMemories: Memory[], stripIdx: number }> = ({ stripMemories, stripIdx }) => {
+const FilmStrip: React.FC<{ stripMemories: Memory[], stripIdx: number, scrollRef: React.RefObject<HTMLDivElement> }> = ({ stripMemories, stripIdx, scrollRef }) => {
   const ref = useRef(null);
   
   const { scrollYProgress } = useScroll({
+    container: scrollRef,
     target: ref,
     offset: ["start end", "end start"]
   });
@@ -76,9 +77,10 @@ const FilmStrip: React.FC<{ stripMemories: Memory[], stripIdx: number }> = ({ st
   );
 };
 
-const Slide: React.FC<{ memory: Memory, index: number }> = ({ memory, index }) => {
+const Slide: React.FC<{ memory: Memory, index: number, scrollRef: React.RefObject<HTMLDivElement> }> = ({ memory, index, scrollRef }) => {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
+    container: scrollRef,
     target: ref,
     offset: ["start end", "end start"]
   });
@@ -126,9 +128,10 @@ const Slide: React.FC<{ memory: Memory, index: number }> = ({ memory, index }) =
   );
 };
 
-export default function TimelineOverlay({ memories }: { memories: Memory[] }) {
+export default function TimelineOverlay({ memories, scrollRef }: { memories: Memory[], scrollRef: React.RefObject<HTMLDivElement> }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
+    container: scrollRef,
     target: containerRef,
     offset: ["start start", "end end"]
   });
@@ -185,7 +188,7 @@ export default function TimelineOverlay({ memories }: { memories: Memory[] }) {
       <div className="space-y-48 mt-[50vh] relative z-10 hidden sm:block">
         {Array.from({ length: Math.ceil(memories.length / 4) }).map((_, stripIdx) => {
           const stripMemories = memories.slice(stripIdx * 4, (stripIdx + 1) * 4);
-          return <FilmStrip key={stripIdx} stripMemories={stripMemories} stripIdx={stripIdx} />;
+          return <FilmStrip key={stripIdx} stripMemories={stripMemories} stripIdx={stripIdx} scrollRef={scrollRef} />;
         })}
       </div>
       
@@ -208,7 +211,7 @@ export default function TimelineOverlay({ memories }: { memories: Memory[] }) {
       {/* Scattered Slides (Interactive) */}
       <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 pt-48 pb-64 px-8 relative z-10 overflow-hidden">
         {memories.slice(0, 2).map((m, i) => (
-          <Slide key={`slide-${m.id}`} memory={m} index={i} />
+          <Slide key={`slide-${m.id}`} memory={m} index={i} scrollRef={scrollRef} />
         ))}
       </div>
 

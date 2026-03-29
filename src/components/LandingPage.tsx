@@ -294,6 +294,31 @@ export default function LandingPage({ onEnterVault, memories }: LandingPageProps
         </div>
       </section>
 
+      {/* Decorative Cozy Divider */}
+      <div className="relative h-32 flex items-center justify-center overflow-hidden pointer-events-none z-20">
+        <div className="absolute w-full h-[1px] bg-gradient-to-r from-transparent via-light-brown/40 to-transparent" />
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.9 }}
+          whileInView={{ opacity: 0.5, scale: 1 }}
+          viewport={{ once: true }}
+          className="relative px-8 py-3 flex items-center gap-6 text-brown bg-cream/80 backdrop-blur-[2px]"
+        >
+          <Leaf size={20} className="rotate-[-10deg] opacity-60" />
+          <div className="flex gap-2">
+            {[...Array(3)].map((_, i) => (
+              <div key={i} className="w-1 h-1 rounded-full bg-brown/20" />
+            ))}
+          </div>
+          <span className="font-hand text-xl italic tracking-[0.2em] whitespace-nowrap">gathering moments...</span>
+          <div className="flex gap-2">
+            {[...Array(3)].map((_, i) => (
+              <div key={i} className="w-1 h-1 rounded-full bg-brown/20" />
+            ))}
+          </div>
+          <Leaf size={20} className="rotate-[190deg] opacity-60 scale-x-[-1]" />
+        </motion.div>
+      </div>
+
       {/* Features Section */}
       <section className="py-24 px-6 max-w-5xl mx-auto relative z-20">
         <div className="text-center mb-16">

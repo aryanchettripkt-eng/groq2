@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, Sparkles, BookOpen, Search, Leaf, FolderHeart, History, Music, Check, Edit2, Star, Heart, Camera as CameraIcon, Mic, Type, Play, SkipBack, SkipForward, Smile, Pin } from 'lucide-react';
 import { Memory, Album, DayReaction, searchMemories } from '../lib/groq';
@@ -46,6 +46,7 @@ export default function ExtraPages({
   const [isSearching, setIsSearching] = useState(false);
   const [searchResult, setSearchResult] = useState<{intro: string, memoryId: string | null} | null>(null);
   const [searchError, setSearchError] = useState<string | null>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   if (!activeOverlay) return null;
 
@@ -76,6 +77,7 @@ export default function ExtraPages({
 
   return (
     <motion.div 
+      ref={scrollRef}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 20 }}
@@ -268,7 +270,7 @@ export default function ExtraPages({
           </div>
         )}
 
-        {activeOverlay === 'timeline' && <TimelineOverlay memories={memories} />}
+        {activeOverlay === 'timeline' && <TimelineOverlay memories={memories} scrollRef={scrollRef} />}
 
         {activeOverlay === 'scrapbook' && (
           <div className="relative min-h-[120vh] flex items-center justify-center p-4 sm:p-10">
