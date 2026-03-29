@@ -294,6 +294,39 @@ export default function LandingPage({ onEnterVault, memories }: LandingPageProps
         </div>
       </section>
 
+      {/* Features Section */}
+      <section className="py-24 px-6 max-w-5xl mx-auto relative z-20">
+        <div className="text-center mb-16">
+          <div className="font-hand text-sm text-moss tracking-[0.12em] uppercase mb-3">✦ what it does ✦</div>
+          <h2 className="font-serif text-4xl md:text-6xl text-dark-brown leading-tight mb-5">Every feature feels like<br /><em className="italic text-brown">turning a page.</em></h2>
+          <p className="font-body italic text-brown max-w-[500px] mx-auto text-lg leading-relaxed">Not a database. Not a productivity tool. A companion for your inner life.</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {[
+            { icon: <Sparkles className="text-moss" />, title: 'Smart Memory Collection', desc: 'Gather notes, photos, voice memos, and stray thoughts from anywhere.', tag: 'gather' },
+            { icon: <BookOpen className="text-brown" />, title: 'AI Organisation', desc: 'Memories arrange themselves by feeling, person, place, and season.', tag: 'organise' },
+            { icon: <Search className="text-dusty-rose" />, title: 'Contextual Recall', desc: 'Type a feeling, a name, a half-remembered sentence — and it finds it.', tag: 'recall' },
+            { icon: <Leaf className="text-sage" />, title: 'Gentle Summaries', desc: 'At the end of a month, receive a soft letter written in your own voice.', tag: 'reflect' }
+          ].map((f, i) => (
+            <motion.div 
+              key={i}
+              initial={{ opacity: 0, x: i % 2 === 0 ? -20 : 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ delay: i * 0.1 }}
+              className="bg-parchment p-10 border border-light-brown/40 relative group"
+            >
+              <div className="absolute -top-1.5 right-6 w-10 h-5 bg-faded-yellow/60 rotate-1 border border-brown/20" />
+              <div className="text-4xl mb-6">{f.icon}</div>
+              <h3 className="font-serif text-2xl text-dark-brown mb-4">{f.title}</h3>
+              <p className="font-body text-lg text-brown leading-relaxed mb-6">{f.desc}</p>
+              <span className="inline-block font-hand text-sm text-moss px-3 py-1 bg-moss/10 rounded-full border border-moss/30">{f.tag}</span>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
       <footer className="bg-ink py-20 px-10 flex flex-col md:flex-row items-center justify-between gap-6 relative">
         <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-parchment/20 to-transparent" />
         <div className="font-serif text-2xl text-parchment italic">Reminiq</div>

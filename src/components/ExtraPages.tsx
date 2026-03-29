@@ -90,39 +90,6 @@ export default function ExtraPages({
       </button>
 
       <div className="max-w-5xl mx-auto px-6 py-24">
-        {activeOverlay === 'features' && (
-          <section className="space-y-16">
-            <div className="text-center">
-              <div className="font-hand text-sm text-moss tracking-[0.12em] uppercase mb-3">✦ what it does ✦</div>
-              <h2 className="font-serif text-4xl md:text-6xl text-dark-brown leading-tight mb-5">Every feature feels like<br /><em className="italic text-brown">turning a page.</em></h2>
-              <p className="font-body italic text-brown max-w-[500px] mx-auto text-lg leading-relaxed">Not a database. Not a productivity tool. A companion for your inner life.</p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {[
-                { icon: <Sparkles className="text-moss" />, title: 'Smart Memory Collection', desc: 'Gather notes, photos, voice memos, and stray thoughts from anywhere.', tag: 'gather' },
-                { icon: <BookOpen className="text-brown" />, title: 'AI Organisation', desc: 'Memories arrange themselves by feeling, person, place, and season.', tag: 'organise' },
-                { icon: <Search className="text-dusty-rose" />, title: 'Contextual Recall', desc: 'Type a feeling, a name, a half-remembered sentence — and it finds it.', tag: 'recall' },
-                { icon: <Leaf className="text-sage" />, title: 'Gentle Summaries', desc: 'At the end of a month, receive a soft letter written in your own voice.', tag: 'reflect' }
-              ].map((f, i) => (
-                <motion.div 
-                  key={i}
-                  initial={{ opacity: 0, x: i % 2 === 0 ? -20 : 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.1 }}
-                  className="bg-parchment p-10 border border-light-brown/40 relative group"
-                >
-                  <div className="absolute -top-1.5 right-6 w-10 h-5 bg-faded-yellow/60 rotate-1 border border-brown/20" />
-                  <div className="text-4xl mb-6">{f.icon}</div>
-                  <h3 className="font-serif text-2xl text-dark-brown mb-4">{f.title}</h3>
-                  <p className="font-body text-lg text-brown leading-relaxed mb-6">{f.desc}</p>
-                  <span className="inline-block font-hand text-sm text-moss px-3 py-1 bg-moss/10 rounded-full border border-moss/30">{f.tag}</span>
-                </motion.div>
-              ))}
-            </div>
-          </section>
-        )}
-
         {activeOverlay === 'try-it' && (
           <section className="space-y-16">
             <div className="text-center">
@@ -301,22 +268,58 @@ export default function ExtraPages({
         )}
 
         {activeOverlay === 'timeline' && (
-          <div className="space-y-24 pb-32 relative">
-            {/* Decorative Background Elements */}
-            <div className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden opacity-20">
-              <Star className="absolute top-10 left-[10%] text-brown rotate-12" size={40} />
-              <Heart className="absolute top-40 right-[15%] text-dusty-rose -rotate-12" size={30} />
-              <div className="absolute bottom-20 left-[5%] font-hand text-4xl text-brown/30 -rotate-6">memories...</div>
-              <Star className="absolute bottom-40 right-[10%] text-moss rotate-45" size={24} />
+          <div className="space-y-24 pb-32 relative text-cream min-h-screen">
+            {/* Immersive Campfire/Night Background */}
+            <div className="fixed inset-0 z-[-1] pointer-events-none">
+              <img 
+                src="https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?auto=format&fit=crop&q=80&w=1920" 
+                className="w-full h-full object-cover brightness-[0.3]" 
+                alt="Campfire background"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-orange-900/30 via-black/80 to-slate-900/90" />
+              
+              {/* Animated Sparks */}
+              <div className="absolute inset-0 overflow-hidden">
+                {[...Array(15)].map((_, i) => (
+                  <motion.div
+                    key={`spark-${i}`}
+                    animate={{
+                      y: ['100vh', '-10vh'],
+                      x: [Math.random() * 10 - 5 + 'vw', Math.random() * 10 - 5 + 'vw'],
+                      opacity: [0, 1, 0]
+                    }}
+                    transition={{
+                      duration: Math.random() * 3 + 2,
+                      repeat: Infinity,
+                      ease: "easeOut",
+                      delay: Math.random() * 5
+                    }}
+                    className="absolute bottom-0 w-1 h-1 bg-orange-400 rounded-full blur-[1px]"
+                    style={{ left: `${20 + Math.random() * 60}%` }}
+                  />
+                ))}
+              </div>
             </div>
 
-            <div className="text-center relative">
-              <div className="absolute -top-12 left-1/2 -translate-x-1/2 opacity-40">
-                <CameraIcon size={48} className="text-brown" />
-              </div>
-              <h2 className="font-hand text-6xl text-dark-brown -rotate-2 mb-4">Vibin' through the stash</h2>
-              <p className="font-hand text-xl text-brown/60 italic">A reel of moments, unspooled...</p>
+            {/* Decorative Background Elements */}
+            <div className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden opacity-20">
+              <Star className="absolute top-10 left-[10%] text-faded-yellow rotate-12" size={40} />
+              <Heart className="absolute top-40 right-[15%] text-dusty-rose -rotate-12" size={30} />
+              <div className="absolute bottom-[20%] left-[5%] font-hand text-4xl text-faded-yellow/30 -rotate-6">memories...</div>
+              <Star className="absolute bottom-[40%] right-[10%] text-faded-yellow rotate-45" size={24} />
             </div>
+
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-center relative pt-12"
+            >
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 opacity-20">
+                <CameraIcon size={48} className="text-faded-yellow" />
+              </div>
+              <h2 className="font-hand text-6xl text-faded-yellow -rotate-2 mb-4 drop-shadow-lg">Vibin' through the stash</h2>
+              <p className="font-hand text-xl text-cream/70 italic drop-shadow-md">A reel of moments, unspooled by the fire...</p>
+            </motion.div>
 
             {/* Film Strips */}
             <div className="space-y-20">
@@ -326,7 +329,14 @@ export default function ExtraPages({
                 const rotation = stripIdx % 2 === 0 ? 'rotate-1' : '-rotate-1';
                 
                 return (
-                  <div key={stripIdx} className={`relative ${rotation}`}>
+                  <motion.div 
+                    key={stripIdx} 
+                    className={`relative ${rotation}`}
+                    initial={{ opacity: 0, y: 60 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-100px" }}
+                    transition={{ duration: 0.8 }}
+                  >
                     {/* Film Strip Container */}
                     <div className="bg-zinc-900 py-10 px-4 shadow-2xl relative border-y-[12px] border-zinc-950">
                       {/* Top Sprocket Holes */}
@@ -376,23 +386,26 @@ export default function ExtraPages({
                     </div>
                     
                     {/* Handwritten Caption for the strip */}
-                    <div className="mt-4 text-center">
-                      <span className="font-hand text-2xl text-brown/70 italic">
+                    <div className="mt-6 text-center">
+                      <span className="font-hand text-2xl text-faded-yellow/90 italic drop-shadow-md">
                         {stripIdx === 0 ? "the early days..." : stripIdx === 1 ? "bits of joy" : "and so it goes..."}
                       </span>
                     </div>
-                  </div>
+                  </motion.div>
                 );
               })}
             </div>
 
             {/* Scattered Slides & Doodles */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 pt-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 pt-12 pb-24">
               {memories.slice(0, 2).map((m, i) => (
                 <motion.div 
                   key={`slide-${m.id}`}
-                  initial={{ opacity: 0, rotate: i === 0 ? -5 : 5 }}
-                  animate={{ opacity: 1 }}
+                  initial={{ opacity: 0, rotate: i === 0 ? -15 : 15, y: 50, scale: 0.9 }}
+                  whileInView={{ opacity: 1, rotate: i === 0 ? -5 : 5, y: 0, scale: 1 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.6, delay: i * 0.2 }}
+                  whileHover={{ scale: 1.05, rotate: 0, zIndex: 20 }}
                   className="flex justify-center"
                 >
                   <div className="bg-[#f2e8d5] p-5 pb-16 shadow-2xl relative w-72 border border-brown/10">
@@ -420,12 +433,17 @@ export default function ExtraPages({
             </div>
 
             {/* Final Doodle */}
-            <div className="flex justify-center pt-12">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              className="flex justify-center pt-12"
+            >
               <div className="relative">
-                <div className="font-hand text-3xl text-brown/40 italic">to be continued...</div>
+                <div className="font-hand text-3xl text-faded-yellow/70 italic drop-shadow-md">to be continued...</div>
                 <Star className="absolute -top-6 -right-8 text-faded-yellow animate-pulse" />
               </div>
-            </div>
+            </motion.div>
           </div>
         )}
 

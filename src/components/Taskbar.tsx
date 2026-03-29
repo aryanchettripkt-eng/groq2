@@ -20,7 +20,6 @@ interface TaskbarProps {
 
 export default function Taskbar({ view, onViewChange, activeOverlay, onOverlayChange }: TaskbarProps) {
   const items = [
-    { id: 'features', icon: <Sparkles size={20} />, label: 'Features', type: 'overlay' },
     { id: 'try-it', icon: <Search size={20} />, label: 'Try It', type: 'overlay' },
     { id: 'calendar', icon: <Calendar size={20} />, label: 'Calendar', type: 'overlay' },
     { id: 'albums', icon: <FolderHeart size={20} />, label: 'Albums', type: 'overlay' },

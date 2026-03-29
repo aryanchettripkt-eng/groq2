@@ -149,6 +149,7 @@ export interface DayReaction {
   date: string;
   emoji: string;
   journal?: string;
+  photoUrl?: string;
   music?: {
     song: string;
     artist: string;

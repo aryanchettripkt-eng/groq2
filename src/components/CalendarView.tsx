@@ -9,10 +9,10 @@ import {
   Music as MusicIcon,
   Mic,
   Image as ImageIcon,
-  SmilePlus,
-  Clock,
   BookOpen,
-  Trash2
+  Trash2,
+  Camera,
+  Clock
 } from 'lucide-react';
 import { Memory, DayReaction } from '../lib/groq';
 
@@ -58,6 +58,11 @@ export default function CalendarView({
   const getReactionForDate = (day: number) => {
     const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
     return dayReactions.find(r => r.date === dateStr)?.emoji;
+  };
+
+  const getPhotoForDate = (day: number) => {
+    const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    return dayReactions.find(r => r.date === dateStr)?.photoUrl;
   };
 
   const commonEmojis = ['✨', '❤️', '🌙', '🍃', '🌊', '🕯️', '🎞️', '☕'];
@@ -154,12 +159,19 @@ export default function CalendarView({
 
                 {/* Reaction Sticker */}
                 {reaction && (
-                  <span className="absolute top-1 right-1 text-sm md:text-base drop-shadow-sm rotate-12">{reaction}</span>
+                  <span className="absolute top-1 right-1 text-sm md:text-base drop-shadow-sm rotate-12 z-10">{reaction}</span>
                 )}
 
-                {/* Memory Stickers */}
+                {/* Day Photo & Memory Stickers */}
                 <div className="absolute inset-0 p-2 flex items-center justify-center pointer-events-none">
-                  {dateMemories.length > 0 && (
+                  {getPhotoForDate(d) && (
+                    <div className="absolute inset-0 p-2 flex items-center justify-center">
+                      <div className="w-full h-full p-1 bg-white shadow-md border border-black/5 -rotate-2">
+                        <img src={getPhotoForDate(d)} className="w-full h-full object-cover grayscale-[0.2]" alt="" />
+                      </div>
+                    </div>
+                  )}
+                  {dateMemories.length > 0 && !getPhotoForDate(d) && (
                     <div className="relative w-full h-full">
                       {dateMemories.slice(0, 2).map((mem, i) => (
                         <motion.div
@@ -242,38 +254,77 @@ export default function CalendarView({
               </div>
 
               <div className="flex-1 overflow-y-auto p-6 space-y-8">
-                {/* Emoji Reaction Selector */}
+                {/* Day Photo */}
                 <div className="bg-white/40 border border-light-brown/10 rounded-2xl p-4">
-                  <div className="flex items-center gap-3 mb-3">
-                    <SmilePlus size={18} className="text-moss" />
-                    <span className="font-hand text-lg text-brown/60">How did this day feel?</span>
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-3">
+                      <Camera size={18} className="text-moss" />
+                      <span className="font-hand text-lg text-brown/60">Moment of the day</span>
+                    </div>
                   </div>
-                  <div className="flex flex-wrap gap-2">
-                    {commonEmojis.map(emoji => (
-                      <button
-                        key={emoji}
-                        onClick={() => selectedDateStr && onUpdateDayReaction(selectedDateStr, { emoji })}
-                        className={`w-10 h-10 rounded-xl flex items-center justify-center text-xl transition-all hover:scale-110 ${selectedDayData?.emoji === emoji ? 'bg-moss/20 border border-moss/40 scale-110' : 'bg-white/40 border border-transparent hover:bg-white/60'}`}
-                      >
-                        {emoji}
-                      </button>
-                    ))}
-                  </div>
+                  
+                  {selectedDayData?.photoUrl ? (
+                    <div className="relative group rounded-[3px] overflow-hidden">
+                      <img src={selectedDayData.photoUrl} className="w-full h-48 object-cover" />
+                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex justify-center items-center transition-opacity">
+                        <label className="cursor-pointer bg-white text-dark-brown font-hand px-4 py-2 rounded shadow-lg text-sm transition-transform hover:scale-105">
+                          Change Photo
+                          <input type="file" className="hidden" accept="image/*" onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              const reader = new FileReader();
+                              reader.onload = (ev) => selectedDateStr && onUpdateDayReaction(selectedDateStr, { photoUrl: ev.target?.result as string });
+                              reader.readAsDataURL(file);
+                            }
+                          }} />
+                        </label>
+                      </div>
+                    </div>
+                  ) : (
+                    <label className="block w-full border-2 border-dashed border-light-brown/20 rounded-[3px] p-8 text-center cursor-pointer hover:border-moss/50 transition-colors">
+                      <input type="file" className="hidden" accept="image/*" onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          const reader = new FileReader();
+                          reader.onload = (ev) => selectedDateStr && onUpdateDayReaction(selectedDateStr, { photoUrl: ev.target?.result as string });
+                          reader.readAsDataURL(file);
+                        }
+                      }} />
+                      <div className="mx-auto w-12 h-12 bg-white flex items-center justify-center shadow-sm -rotate-3 mb-3">
+                        <Camera className="text-brown/40" size={24} />
+                      </div>
+                      <span className="font-hand text-brown/50 block">Click to add a picture</span>
+                    </label>
+                  )}
                 </div>
 
-                {/* Day Journal */}
+                {/* Day Journal & Emojis */}
                 <div className="bg-white/40 border border-light-brown/10 rounded-2xl p-4">
                   <div className="flex items-center gap-3 mb-3">
                     <BookOpen size={18} className="text-moss" />
                     <span className="font-hand text-lg text-brown/60">Journal for the day</span>
                   </div>
+                  
                   <textarea
                     value={selectedDayData?.journal || ''}
                     onChange={(e) => selectedDateStr && onUpdateDayReaction(selectedDateStr, { journal: e.target.value })}
-                    className="w-full bg-parchment/20 border border-light-brown/15 rounded-[3px] px-3 py-2 text-ink font-hand outline-none resize-none"
-                    rows={3}
+                    className="w-full bg-parchment/20 border border-light-brown/15 rounded-[3px] px-3 py-2 text-ink font-hand outline-none resize-none mb-3"
+                    rows={4}
                     placeholder="Write your thoughts about the entire day..."
                   />
+
+                  <div className="flex flex-wrap gap-2 pt-3 border-t border-light-brown/10">
+                    <span className="font-hand text-sm text-brown/40 self-center mr-2">Mood:</span>
+                    {commonEmojis.map(emoji => (
+                      <button
+                        key={emoji}
+                        onClick={() => selectedDateStr && onUpdateDayReaction(selectedDateStr, { emoji })}
+                        className={`w-8 h-8 rounded-lg flex items-center justify-center text-lg transition-all hover:scale-110 ${selectedDayData?.emoji === emoji ? 'bg-moss/20 border border-moss/40 scale-110' : 'bg-white/40 border border-transparent hover:bg-white/60'}`}
+                      >
+                        {emoji}
+                      </button>
+                    ))}
+                  </div>
                 </div>
 
                 {/* Day Music */}
