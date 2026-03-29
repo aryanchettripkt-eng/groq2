@@ -9,10 +9,10 @@ const FilmStrip: React.FC<{ stripMemories: Memory[], stripIdx: number }> = ({ st
   return (
     <motion.div
       className="relative w-full max-w-5xl mx-auto"
-      initial={{ opacity: 0, x: fromLeft ? -120 : 120 }}
-      whileInView={{ opacity: 1, x: 0 }}
+      initial={{ opacity: 0, x: fromLeft ? -120 : 120, rotateZ: fromLeft ? -3 : 3, scale: 0.95 }}
+      whileInView={{ opacity: 1, x: 0, rotateZ: 0, scale: 1 }}
       viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.7, ease: 'easeOut' }}
+      transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
     >
       {/* Film Strip */}
       <div className="bg-zinc-900 py-10 px-4 shadow-2xl relative border-y-[12px] border-zinc-950">
@@ -61,10 +61,10 @@ const FilmStrip: React.FC<{ stripMemories: Memory[], stripIdx: number }> = ({ st
 
       {/* Caption */}
       <motion.div
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        transition={{ delay: 0.3 }}
+        transition={{ delay: 0.4, duration: 0.6, ease: 'easeOut' }}
         className="mt-6 text-center"
       >
         <span className="text-2xl text-[#e8d890]/90 italic" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.8)' }}>
@@ -78,12 +78,12 @@ const FilmStrip: React.FC<{ stripMemories: Memory[], stripIdx: number }> = ({ st
 const Slide: React.FC<{ memory: Memory, index: number }> = ({ memory, index }) => {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 60, rotate: index === 0 ? -12 : 12 }}
-      whileInView={{ opacity: 1, y: 0, rotate: index === 0 ? -4 : 4 }}
+      initial={{ opacity: 0, y: 80, rotateZ: index === 0 ? -18 : 18, scale: 0.85 }}
+      whileInView={{ opacity: 1, y: 0, rotateZ: index === 0 ? -4 : 4, scale: 1 }}
       viewport={{ once: true, amount: 0.3 }}
-      transition={{ duration: 0.7, delay: index * 0.15, ease: 'easeOut' }}
-      whileHover={{ scale: 1.08, rotate: 0, zIndex: 100, transition: { duration: 0.25 } }}
-      className="flex justify-center cursor-pointer"
+      transition={{ duration: 0.9, delay: index * 0.15, ease: [0.16, 1, 0.3, 1] }}
+      whileHover={{ scale: 1.08, rotateZ: 0, zIndex: 100, transition: { duration: 0.3, ease: 'easeOut' } }}
+      className="flex justify-center cursor-pointer perspective-1000"
     >
       <div className="bg-[#f2e8d5] p-5 pb-16 shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative w-72 border border-[#c4a882]/30">
         <div className="text-center mb-3">
@@ -119,13 +119,11 @@ const Slide: React.FC<{ memory: Memory, index: number }> = ({ memory, index }) =
 export default function TimelineOverlay({ memories }: { memories: Memory[], scrollRef?: React.RefObject<HTMLDivElement> }) {
   return (
     <div className="relative text-white overflow-x-hidden">
-      {/* Fixed background — scoped via absolute positioning inside the overlay's scroll container */}
-      <div className="sticky top-0 h-0 overflow-visible pointer-events-none" style={{ zIndex: -1 }}>
+      {/* Fixed background */}
+      <div className="fixed inset-0 w-screen h-screen pointer-events-none" style={{ zIndex: -1 }}>
         <div
-          className="absolute inset-x-0"
+          className="absolute inset-0"
           style={{
-            top: '-100vh',
-            height: '200vh',
             backgroundImage: `url('https://images.unsplash.com/photo-1501555088652-021faa106b9b?auto=format&fit=crop&q=80&w=1920')`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
@@ -133,10 +131,8 @@ export default function TimelineOverlay({ memories }: { memories: Memory[], scro
           }}
         />
         <div
-          className="absolute inset-x-0"
+          className="absolute inset-0"
           style={{
-            top: '-100vh',
-            height: '200vh',
             background: 'linear-gradient(to bottom, rgba(10,17,40,0.88) 0%, rgba(0,0,0,0.5) 50%, rgba(44,20,12,0.82) 100%)',
           }}
         />
@@ -145,9 +141,9 @@ export default function TimelineOverlay({ memories }: { memories: Memory[], scro
       {/* Hero */}
       <div className="min-h-[80vh] flex flex-col items-center justify-center text-center px-4 pt-16 pb-24">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: 'easeOut' }}
+          initial={{ opacity: 0, y: 40, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
         >
           <CameraIcon size={52} className="mx-auto mb-6 text-[#e8d890] opacity-50" />
           <h2
@@ -204,10 +200,10 @@ export default function TimelineOverlay({ memories }: { memories: Memory[], scro
       {/* Outro */}
       <div className="h-64 flex items-center justify-center">
         <motion.div
-          initial={{ opacity: 0, scale: 0.85 }}
-          whileInView={{ opacity: 1, scale: 1 }}
+          initial={{ opacity: 0, scale: 0.85, y: 30 }}
+          whileInView={{ opacity: 1, scale: 1, y: 0 }}
           viewport={{ once: true, amount: 0.5 }}
-          transition={{ duration: 0.9 }}
+          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
           className="relative text-center"
         >
           <div
