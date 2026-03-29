@@ -225,9 +225,9 @@ export default function Vault({
 
   const initThree = () => {
     const scene = new THREE.Scene();
-    // Warm cottagecore evening — soft amber haze
-    scene.fog = new THREE.FogExp2(0x6b4a2a, 0.022);
-    scene.background = new THREE.Color(0x3d2810);
+    // Dark wood attic loft — cozy rainy night
+    scene.fog = new THREE.FogExp2(0x1a1510, 0.025);
+    scene.background = new THREE.Color(0x0e0c08);
     sceneRef.current = scene;
 
     const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 200);
@@ -244,22 +244,22 @@ export default function Vault({
     rendererRef.current = renderer;
 
     // ── ROOM WALLS ──────────────────────────────────────────
-    // Warm cream-sage wall color — cottagecore plaster
+    // Dark oak wood paneling — attic loft
     const wallMat = new THREE.MeshStandardMaterial({
-      color: 0xc4a882,
-      roughness: 0.92,
-      metalness: 0.0,
-      emissive: new THREE.Color(0x3d1f08),
-      emissiveIntensity: 0.12
+      color: 0x3a2a1a,
+      roughness: 0.88,
+      metalness: 0.05,
+      emissive: new THREE.Color(0x1a0e05),
+      emissiveIntensity: 0.08
     });
 
-    // Floor — warm honey wood
+    // Floor — dark aged wood planks
     const floorGeo = new THREE.PlaneGeometry(50, 50);
     const floorMat = new THREE.MeshStandardMaterial({
-      color: 0x7a4e28,
-      roughness: 0.9,
-      emissive: new THREE.Color(0x2a1408),
-      emissiveIntensity: 0.1
+      color: 0x2e1e10,
+      roughness: 0.92,
+      emissive: new THREE.Color(0x100a04),
+      emissiveIntensity: 0.06
     });
     const floor = new THREE.Mesh(floorGeo, floorMat);
     floor.rotation.x = -Math.PI / 2;
@@ -285,26 +285,35 @@ export default function Vault({
     rightWall.rotation.y = -Math.PI / 2;
     scene.add(rightWall);
 
-    // Ceiling — warm off-white plaster
+    // Ceiling — dark wood A-frame attic
     const ceilMat = new THREE.MeshStandardMaterial({
-      color: 0xd4bc98,
-      roughness: 0.95,
-      emissive: new THREE.Color(0x2a1a08),
-      emissiveIntensity: 0.08
+      color: 0x2a1a0e,
+      roughness: 0.9,
+      emissive: new THREE.Color(0x0a0604),
+      emissiveIntensity: 0.05
     });
     const ceiling = new THREE.Mesh(new THREE.PlaneGeometry(50, 50), ceilMat);
     ceiling.rotation.x = Math.PI / 2;
     ceiling.position.y = 10;
     scene.add(ceiling);
 
-    // ── BED ────────────────────────────────────────────────
-    // Bed frame — warm walnut brown
+    // A-frame roof beams
+    const beamMat = new THREE.MeshStandardMaterial({ color: 0x3a2815, roughness: 0.85, emissive: new THREE.Color(0x0a0604), emissiveIntensity: 0.1 });
+    const leftBeam = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.35, 30), beamMat);
+    leftBeam.position.set(-8, 7, 0); leftBeam.rotation.z = Math.PI * 0.18;
+    scene.add(leftBeam);
+    const rightBeam = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.35, 30), beamMat);
+    rightBeam.position.set(8, 7, 0); rightBeam.rotation.z = -Math.PI * 0.18;
+    scene.add(rightBeam);
+
+    // ── BED ────────────────────────────────────────────
+    // Bed frame — dark weathered wood
     const bedFrameMat = new THREE.MeshStandardMaterial({
-      color: 0x7a4828,
-      roughness: 0.75,
+      color: 0x2a1a0e,
+      roughness: 0.82,
       metalness: 0.05,
-      emissive: new THREE.Color(0x2a1408),
-      emissiveIntensity: 0.15
+      emissive: new THREE.Color(0x0a0604),
+      emissiveIntensity: 0.1
     });
     const bedBase = new THREE.Mesh(new THREE.BoxGeometry(9, 0.6, 6), bedFrameMat);
     bedBase.position.set(0, -4.7, 2);
@@ -318,12 +327,12 @@ export default function Vault({
     headboard.castShadow = true;
     scene.add(headboard);
 
-    // Mattress / duvet — warm cream floral cottagecore
+    // Mattress / duvet — deep teal-green linen
     const duvetMat = new THREE.MeshStandardMaterial({
-      color: 0xede0c8,
+      color: 0x3a5a52,
       roughness: 0.95,
-      emissive: new THREE.Color(0x4a2e10),
-      emissiveIntensity: 0.1
+      emissive: new THREE.Color(0x0a1a15),
+      emissiveIntensity: 0.08
     });
     const duvet = new THREE.Mesh(new THREE.BoxGeometry(8.6, 0.7, 5.4), duvetMat);
     duvet.position.set(0.1, -4.05, 2.1);
@@ -335,10 +344,10 @@ export default function Vault({
       const bump = new THREE.Mesh(
         new THREE.SphereGeometry(0.5 + Math.random() * 0.5, 8, 6),
         new THREE.MeshStandardMaterial({
-          color: 0xe0d0b0,
+          color: 0x466862,
           roughness: 1,
-          emissive: new THREE.Color(0x3a2208),
-          emissiveIntensity: 0.1
+          emissive: new THREE.Color(0x0a1510),
+          emissiveIntensity: 0.06
         })
       );
       bump.scale.y = 0.22;
@@ -346,13 +355,13 @@ export default function Vault({
       scene.add(bump);
     }
 
-    // Pillows — sage green, dusty rose, cream check (cottagecore palette)
-    const pillowMat = new THREE.MeshStandardMaterial({ color: 0xe8dcc4, roughness: 0.92, emissive: new THREE.Color(0x3a2010), emissiveIntensity: 0.12 });
-    const sagePillowMat = new THREE.MeshStandardMaterial({ color: 0x7a9a6a, roughness: 0.88, emissive: new THREE.Color(0x1a2a10), emissiveIntensity: 0.12 });
-    const rosePillowMat = new THREE.MeshStandardMaterial({ color: 0xc4907a, roughness: 0.9, emissive: new THREE.Color(0x3a1810), emissiveIntensity: 0.12 });
+    // Pillows — slate blue, teal, warm cream (cozy attic palette)
+    const pillowMat = new THREE.MeshStandardMaterial({ color: 0xc8baa8, roughness: 0.92, emissive: new THREE.Color(0x1a1208), emissiveIntensity: 0.08 });
+    const sagePillowMat = new THREE.MeshStandardMaterial({ color: 0x2a3a4a, roughness: 0.88, emissive: new THREE.Color(0x0a1018), emissiveIntensity: 0.08 });
+    const rosePillowMat = new THREE.MeshStandardMaterial({ color: 0x4a6a62, roughness: 0.9, emissive: new THREE.Color(0x0a1a12), emissiveIntensity: 0.08 });
     [
-      { pos: [-2.5, -3.5, -0.5], mat: pillowMat, s: [2.2, 0.6, 1.6] },
-      { pos: [0.2, -3.5, -0.5], mat: sagePillowMat, s: [2.0, 0.7, 1.6] },
+      { pos: [-2.5, -3.5, -0.5], mat: sagePillowMat, s: [2.2, 0.6, 1.6] },
+      { pos: [0.2, -3.5, -0.5], mat: pillowMat, s: [2.0, 0.7, 1.6] },
       { pos: [2.8, -3.5, -0.4], mat: rosePillowMat, s: [2.4, 0.55, 1.7] },
     ].forEach(({ pos, mat, s }) => {
       const p = new THREE.Mesh(new THREE.BoxGeometry(...s as [number,number,number]), mat);
@@ -361,13 +370,13 @@ export default function Vault({
       scene.add(p);
     });
 
-    // ── SHELVES on back wall ─────────────────────────────────
-    // Warm oak shelf
+    // ── SHELVES on back wall ─────────────────────────
+    // Dark oak shelf
     const shelfMat = new THREE.MeshStandardMaterial({
-      color: 0x9a6a3a,
-      roughness: 0.8,
-      emissive: new THREE.Color(0x2a1408),
-      emissiveIntensity: 0.15
+      color: 0x3a2815,
+      roughness: 0.82,
+      emissive: new THREE.Color(0x0a0604),
+      emissiveIntensity: 0.1
     });
     const addShelf = (y: number, x: number, w: number) => {
       const shelf = new THREE.Mesh(new THREE.BoxGeometry(w, 0.15, 0.8), shelfMat);
@@ -385,8 +394,8 @@ export default function Vault({
     // Small upper shelf
     addShelf(3.5, -7, 3.5);
 
-    // Books on left shelf — warm cottagecore palette
-    const bookColors = [0x8b5a2b, 0xc4845a, 0x6a8a5a, 0x7a6a9a, 0xb87a4a, 0xe8d090, 0x9a5a4a];
+    // Books on left shelf — muted earthy attic tones
+    const bookColors = [0x3a2a1a, 0x5a4a30, 0x4a5a48, 0x3a3a4a, 0x5a3a2a, 0x6a5a3a, 0x4a3a2a];
     for (let i = 0; i < 7; i++) {
       const bh = 0.8 + Math.random() * 0.6;
       const bw = 0.25 + Math.random() * 0.15;
@@ -405,12 +414,12 @@ export default function Vault({
       scene.add(book);
     }
 
-    // Small plant pot on right shelf — terracotta
+    // Small plant pot on right shelf — dark clay
     const potMat = new THREE.MeshStandardMaterial({
-      color: 0xc4703a,
-      roughness: 0.85,
-      emissive: new THREE.Color(0x4a1a08),
-      emissiveIntensity: 0.2
+      color: 0x5a3a22,
+      roughness: 0.88,
+      emissive: new THREE.Color(0x1a0a04),
+      emissiveIntensity: 0.1
     });
     const pot = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.22, 0.55, 10), potMat);
     pot.position.set(4.5, 1.2 + 0.28, -13.5);
@@ -434,14 +443,14 @@ export default function Vault({
     clockFace.position.set(6.5, 1.2 + 0.5, -13.4);
     scene.add(clockFace);
 
-    // Frames on back wall — warm wood frames with botanical art colors
+    // Frames on back wall — dark wood frames
     const frameMat = new THREE.MeshStandardMaterial({
-      color: 0x8a5a2a,
-      roughness: 0.75,
-      emissive: new THREE.Color(0x2a1008),
-      emissiveIntensity: 0.18
+      color: 0x2a1a0e,
+      roughness: 0.8,
+      emissive: new THREE.Color(0x0a0604),
+      emissiveIntensity: 0.1
     });
-    const artColors = [0x8aaa7a, 0xc4906a, 0xa4b898, 0xd4b87a];
+    const artColors = [0x3a4a42, 0x4a3a2e, 0x384838, 0x4a4028];
     [[-4.5, 2.5], [-1.5, 3.0], [2.5, 2.2], [5.5, 3.4]].forEach(([fx, fy], idx) => {
       const fw = 1.4 + Math.random() * 0.6;
       const fh = 1.8 + Math.random() * 0.4;
@@ -459,8 +468,8 @@ export default function Vault({
       scene.add(art);
     });
 
-    // Vinyl records on wall — dark with warm labels
-    const vinylMat = new THREE.MeshStandardMaterial({ color: 0x2a1e14, roughness: 0.4, metalness: 0.3 });
+    // Vinyl records on wall — very dark
+    const vinylMat = new THREE.MeshStandardMaterial({ color: 0x1a1210, roughness: 0.4, metalness: 0.3 });
     [[8, 4.5], [9.5, 3.0]].forEach(([vx, vy]) => {
       const vinyl = new THREE.Mesh(new THREE.CylinderGeometry(0.7, 0.7, 0.05, 32), vinylMat);
       vinyl.rotation.x = Math.PI / 2;
@@ -483,24 +492,24 @@ export default function Vault({
     vineGroupRef.current = vineGroup;
 
     const stemMat = new THREE.MeshStandardMaterial({
-      color: 0x4a6a2e,
-      roughness: 0.85,
-      emissive: new THREE.Color(0x1a2a08),
-      emissiveIntensity: 0.2
+      color: 0x2a3a1a,
+      roughness: 0.88,
+      emissive: new THREE.Color(0x0a1204),
+      emissiveIntensity: 0.1
     });
     const leafMat = new THREE.MeshStandardMaterial({
-      color: 0x5a8a30,
-      roughness: 0.8,
+      color: 0x2a4a1a,
+      roughness: 0.82,
       side: THREE.DoubleSide,
-      emissive: new THREE.Color(0x1e3a08),
-      emissiveIntensity: 0.25
+      emissive: new THREE.Color(0x0a1804),
+      emissiveIntensity: 0.12
     });
     const leafMat2 = new THREE.MeshStandardMaterial({
-      color: 0x7aaa4a,
-      roughness: 0.78,
+      color: 0x3a5a2a,
+      roughness: 0.82,
       side: THREE.DoubleSide,
-      emissive: new THREE.Color(0x2a4a10),
-      emissiveIntensity: 0.22
+      emissive: new THREE.Color(0x0e2208),
+      emissiveIntensity: 0.1
     });
 
     // Ceiling vine tendrils — sweeping across ceiling
@@ -584,52 +593,41 @@ export default function Vault({
 
     scene.add(vineGroup);
 
-    // ── LAMP (bedside) ───────────────────────────────────────
-    // Lamp base — brushed brass
-    const lampBase = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.18, 0.25, 0.15, 12),
-      new THREE.MeshStandardMaterial({ color: 0xc8a040, roughness: 0.4, metalness: 0.7 })
-    );
-    lampBase.position.set(-5.5, -4.5, 0.5);
-    scene.add(lampBase);
-
-    // Lamp pole — brass
-    const lampPole = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.05, 0.05, 2.2, 8),
-      new THREE.MeshStandardMaterial({ color: 0xd4aa40, roughness: 0.25, metalness: 0.9 })
-    );
-    lampPole.position.set(-5.5, -3.3, 0.5);
-    scene.add(lampPole);
-
-    // Lamp shade — warm amber mosaic glow
-    const shadeMat = new THREE.MeshStandardMaterial({
-      color: 0xe88a2a,
-      roughness: 0.5,
-      transparent: true,
-      opacity: 0.88,
-      side: THREE.DoubleSide,
-      emissive: new THREE.Color(0xd06010),
-      emissiveIntensity: 1.0
+    // ── CANDLES (bedside) ─────────────────────────
+    // Replace lamp with candles for that cozy attic glow
+    const candleWax = new THREE.MeshStandardMaterial({ color: 0xd8c8a8, roughness: 0.7, emissive: new THREE.Color(0x3a2810), emissiveIntensity: 0.15 });
+    const candlePositions = [[-5.2, -4.0, 0.3], [-5.8, -3.9, 0.6], [-5.5, -3.85, 1.0]];
+    candlePositions.forEach(([cx, cy, cz], ci) => {
+      const h = 0.6 + ci * 0.25;
+      const candle = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, h, 8), candleWax);
+      candle.position.set(cx, cy + h/2, cz);
+      candle.castShadow = true;
+      scene.add(candle);
+      // Flame glow
+      const flame = new THREE.Mesh(
+        new THREE.SphereGeometry(0.06, 8, 6),
+        new THREE.MeshStandardMaterial({ color: 0xffaa30, emissive: new THREE.Color(0xff8800), emissiveIntensity: 3.0, transparent: true, opacity: 0.9 })
+      );
+      flame.scale.y = 1.8;
+      flame.position.set(cx, cy + h + 0.06, cz);
+      scene.add(flame);
     });
-    const shade = new THREE.Mesh(new THREE.ConeGeometry(0.7, 0.9, 8, 1, true), shadeMat);
-    shade.position.set(-5.5, -1.85, 0.5);
-    scene.add(shade);
 
-    // Lamp point light — strong warm amber glow
-    const lampLight = new THREE.PointLight(0xffaa40, 8.0, 18);
-    lampLight.position.set(-5.5, -2.0, 0.5);
+    // Candle warm glow light
+    const lampLight = new THREE.PointLight(0xffaa30, 5.0, 14);
+    lampLight.position.set(-5.5, -3.2, 0.6);
     lampLight.castShadow = true;
     scene.add(lampLight);
     lampLightRef.current = lampLight;
 
-    // Nightstand — warm oak
+    // Nightstand — dark aged wood
     const nightstand = new THREE.Mesh(
       new THREE.BoxGeometry(1.8, 1.4, 1.5),
       new THREE.MeshStandardMaterial({
-        color: 0x8a5a2a,
-        roughness: 0.8,
-        emissive: new THREE.Color(0x2a1408),
-        emissiveIntensity: 0.15
+        color: 0x2a1a0e,
+        roughness: 0.85,
+        emissive: new THREE.Color(0x0a0604),
+        emissiveIntensity: 0.08
       })
     );
     nightstand.position.set(-5.5, -4.3, 0.5);
@@ -716,10 +714,10 @@ export default function Vault({
     }
     geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
     return new THREE.Points(geo, new THREE.PointsMaterial({
-      color: 0xffa050,
-      size: 0.04,
+      color: 0xcc8840,
+      size: 0.035,
       transparent: true,
-      opacity: 0.22,
+      opacity: 0.15,
       sizeAttenuation: true
     }));
   };
@@ -730,9 +728,9 @@ export default function Vault({
     scene.children.filter(c => (c as any).isLight).forEach(l => scene.remove(l));
 
     const configs: any = {
-      golden: { ambient: [0xff8c30, 1.4], dir: [0xffcc60, 1.2], bg: 0x3d2810, fog: 0x6b4a2a },
-      night:  { ambient: [0x3040a0, 0.6], dir: [0x6080ff, 0.5], bg: 0x14101e, fog: 0x2a2040 },
-      morning:{ ambient: [0xffa050, 1.2], dir: [0xffd080, 1.0], bg: 0x3a2410, fog: 0x6a4a28 }
+      golden: { ambient: [0xcc7a20, 0.6], dir: [0xffaa40, 0.5], bg: 0x0e0c08, fog: 0x1a1510 },
+      night:  { ambient: [0x1a2040, 0.3], dir: [0x304060, 0.3], bg: 0x060810, fog: 0x101420 },
+      morning:{ ambient: [0xaa6030, 0.5], dir: [0xcc8840, 0.4], bg: 0x0e0c08, fog: 0x1a1510 }
     };
 
     const c = configs[mood] || configs.golden;
