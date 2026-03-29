@@ -225,9 +225,9 @@ export default function Vault({
 
   const initThree = () => {
     const scene = new THREE.Scene();
-    // Dark wood attic loft — cozy rainy night
-    scene.fog = new THREE.FogExp2(0x1a1510, 0.025);
-    scene.background = new THREE.Color(0x0e0c08);
+    // Warm cottagecore evening — soft amber haze
+    scene.fog = new THREE.FogExp2(0x6b4a2a, 0.022);
+    scene.background = new THREE.Color(0x3d2810);
     sceneRef.current = scene;
 
     const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 200);
@@ -243,308 +243,440 @@ export default function Vault({
     renderer.toneMappingExposure = 1.8;
     rendererRef.current = renderer;
 
-    // ══════════════════════════════════════════════════════════
-    // COZY A-FRAME ATTIC LOFT — Rainy night, candles, fairy lights
-    // ══════════════════════════════════════════════════════════
-
-    const woodMat = new THREE.MeshStandardMaterial({
-      color: 0x4a3220, roughness: 0.88, metalness: 0.04,
-      emissive: new THREE.Color(0x1a120a), emissiveIntensity: 0.2
-    });
-    const darkWoodMat = new THREE.MeshStandardMaterial({
-      color: 0x3a2216, roughness: 0.9, metalness: 0.02,
-      emissive: new THREE.Color(0x120a06), emissiveIntensity: 0.15
+    // ── ROOM WALLS ──────────────────────────────────────────
+    // Warm cream-sage wall color — cottagecore plaster
+    const wallMat = new THREE.MeshStandardMaterial({
+      color: 0xc4a882,
+      roughness: 0.92,
+      metalness: 0.0,
+      emissive: new THREE.Color(0x3d1f08),
+      emissiveIntensity: 0.12
     });
 
-    // ── FLOOR — aged dark wood planks ──
-    const floor = new THREE.Mesh(new THREE.PlaneGeometry(50, 50), woodMat);
-    floor.rotation.x = -Math.PI / 2; floor.position.y = -5;
-    floor.receiveShadow = true; scene.add(floor);
-
-    // ── A-FRAME STRUCTURE ──
-    // Side walls (pushed wide at x = -18 and 18 to avoid blocking camera/photos)
-    const sideWallGeo = new THREE.PlaneGeometry(50, 16);
-    const lw = new THREE.Mesh(sideWallGeo, woodMat);
-    lw.position.set(-18, 0, 0); lw.rotation.y = Math.PI / 2; scene.add(lw);
-    const rw = new THREE.Mesh(sideWallGeo, woodMat.clone());
-    rw.position.set(18, 0, 0); rw.rotation.y = -Math.PI / 2; scene.add(rw);
+    // Floor — warm honey wood
+    const floorGeo = new THREE.PlaneGeometry(50, 50);
+    const floorMat = new THREE.MeshStandardMaterial({
+      color: 0x7a4e28,
+      roughness: 0.9,
+      emissive: new THREE.Color(0x2a1408),
+      emissiveIntensity: 0.1
+    });
+    const floor = new THREE.Mesh(floorGeo, floorMat);
+    floor.rotation.x = -Math.PI / 2;
+    floor.position.y = -5;
+    floor.receiveShadow = true;
+    scene.add(floor);
 
     // Back wall
-    const bw = new THREE.Mesh(new THREE.PlaneGeometry(36, 18), woodMat);
-    bw.position.set(0, 2, -14); bw.receiveShadow = true; scene.add(bw);
+    const backWall = new THREE.Mesh(new THREE.PlaneGeometry(50, 20), wallMat);
+    backWall.position.set(0, 4, -14);
+    backWall.receiveShadow = true;
+    scene.add(backWall);
 
-    // Sloped A-frame roof panels (pushed wide)
-    const roofGeo = new THREE.PlaneGeometry(22, 32);
-    const roofMat = new THREE.MeshStandardMaterial({
-      color: 0x442b1a, roughness: 0.92,
-      emissive: new THREE.Color(0x100806), emissiveIntensity: 0.15
+    // Left wall
+    const leftWall = new THREE.Mesh(new THREE.PlaneGeometry(50, 20), wallMat);
+    leftWall.position.set(-14, 4, 0);
+    leftWall.rotation.y = Math.PI / 2;
+    scene.add(leftWall);
+
+    // Right wall
+    const rightWall = new THREE.Mesh(new THREE.PlaneGeometry(50, 20), wallMat.clone());
+    rightWall.position.set(14, 4, 0);
+    rightWall.rotation.y = -Math.PI / 2;
+    scene.add(rightWall);
+
+    // Ceiling — warm off-white plaster
+    const ceilMat = new THREE.MeshStandardMaterial({
+      color: 0xd4bc98,
+      roughness: 0.95,
+      emissive: new THREE.Color(0x2a1a08),
+      emissiveIntensity: 0.08
     });
-    const leftRoof = new THREE.Mesh(roofGeo, roofMat);
-    leftRoof.position.set(-10, 8, 0); leftRoof.rotation.z = Math.PI * 0.22;
-    leftRoof.rotation.x = 0; scene.add(leftRoof);
-    const rightRoof = new THREE.Mesh(roofGeo, roofMat.clone());
-    rightRoof.position.set(10, 8, 0); rightRoof.rotation.z = -Math.PI * 0.22;
-    scene.add(rightRoof);
+    const ceiling = new THREE.Mesh(new THREE.PlaneGeometry(50, 50), ceilMat);
+    ceiling.rotation.x = Math.PI / 2;
+    ceiling.position.y = 10;
+    scene.add(ceiling);
 
-    // Exposed A-frame beams (heavy timber, pushed out to match roof)
-    const beamMat = new THREE.MeshStandardMaterial({
-      color: 0x4a3220, roughness: 0.82,
-      emissive: new THREE.Color(0x1a120a), emissiveIntensity: 0.15
+    // ── BED ────────────────────────────────────────────────
+    // Bed frame — warm walnut brown
+    const bedFrameMat = new THREE.MeshStandardMaterial({
+      color: 0x7a4828,
+      roughness: 0.75,
+      metalness: 0.05,
+      emissive: new THREE.Color(0x2a1408),
+      emissiveIntensity: 0.15
     });
-    // Main ridge beam
-    const ridgeBeam = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.35, 34), beamMat);
-    ridgeBeam.position.set(0, 11, 0); scene.add(ridgeBeam);
-    // Angled rafters
-    for (let rz = -12; rz <= 8; rz += 5) {
-      const lb = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.2, 16), beamMat);
-      lb.position.set(-7, 8.5, rz); lb.rotation.z = Math.PI * 0.18; scene.add(lb);
-      const rb = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.2, 16), beamMat);
-      rb.position.set(7, 8.5, rz); rb.rotation.z = -Math.PI * 0.18; scene.add(rb);
-    }
-    // Cross beams
-    for (let cbz = -10; cbz <= 6; cbz += 8) {
-      const cb = new THREE.Mesh(new THREE.BoxGeometry(14, 0.18, 0.18), beamMat);
-      cb.position.set(0, 4, cbz); scene.add(cb);
-    }
+    const bedBase = new THREE.Mesh(new THREE.BoxGeometry(9, 0.6, 6), bedFrameMat);
+    bedBase.position.set(0, -4.7, 2);
+    bedBase.castShadow = true;
+    bedBase.receiveShadow = true;
+    scene.add(bedBase);
 
-    // ── SKYLIGHT WINDOW ──
-    // Window frame
-    const windowFrameMat = new THREE.MeshStandardMaterial({
-      color: 0x5a3a1e, roughness: 0.7, metalness: 0.1,
-      emissive: new THREE.Color(0x1a0e06), emissiveIntensity: 0.1
-    });
-    const wfOuter = new THREE.Mesh(new THREE.BoxGeometry(6.5, 0.2, 8.5), windowFrameMat);
-    wfOuter.position.set(-4, 6.8, -4); wfOuter.rotation.z = Math.PI * 0.25;
-    scene.add(wfOuter);
-    
-    // Glass pane — dark translucent blue-green (rainy night outside)
-    const glassMat = new THREE.MeshStandardMaterial({
-      color: 0x2a4a3a, roughness: 0.1, metalness: 0.15,
-      transparent: true, opacity: 0.55,
-      emissive: new THREE.Color(0x0a2018), emissiveIntensity: 0.2
-    });
-    const glass = new THREE.Mesh(new THREE.PlaneGeometry(5.8, 7.8), glassMat);
-    glass.position.set(-3.95, 6.85, -4); glass.rotation.z = Math.PI * 0.25;
-    glass.rotation.y = Math.PI * 0.08; scene.add(glass);
+    // Headboard
+    const headboard = new THREE.Mesh(new THREE.BoxGeometry(9, 3.5, 0.4), bedFrameMat);
+    headboard.position.set(0, -2.8, -1.1);
+    headboard.castShadow = true;
+    scene.add(headboard);
 
-    // Window mullions (cross bars)
-    const mullionMat = windowFrameMat.clone();
-    const hMullion = new THREE.Mesh(new THREE.BoxGeometry(5.5, 0.08, 0.1), mullionMat);
-    hMullion.position.set(-3.95, 6.85, -4); hMullion.rotation.z = Math.PI * 0.25;
-    scene.add(hMullion);
-    const vMullion = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.1, 7.5), mullionMat);
-    vMullion.position.set(-3.95, 6.85, -4); vMullion.rotation.z = Math.PI * 0.25;
-    scene.add(vMullion);
-
-    // Dim blue-green light through window (moonlit forest outside) - brighter
-    const windowLight = new THREE.PointLight(0x5aad9a, 2.5, 20);
-    windowLight.position.set(-5, 7.5, -4); scene.add(windowLight);
-
-    // ── RAIN PARTICLES (falling strictly OUTSIDE the window) ──
-    const rainCount = 200;
-    const rainGeo = new THREE.BufferGeometry();
-    const rainPos = new Float32Array(rainCount * 3);
-    for (let i = 0; i < rainCount; i++) {
-      rainPos[i*3]   = -7 + Math.random() * 6; // X covers the window
-      rainPos[i*3+1] = 4 + Math.random() * 8; // Y starts high
-      rainPos[i*3+2] = -4.5 + Math.random() * 0.3; // Z is behind the window at -4
-    }
-    rainGeo.setAttribute('position', new THREE.BufferAttribute(rainPos, 3));
-    const rainMat = new THREE.PointsMaterial({
-      color: 0x8ab8b0, size: 0.06, transparent: true, opacity: 0.35, sizeAttenuation: true
-    });
-    const rain = new THREE.Points(rainGeo, rainMat);
-    rain.userData.isRain = true;
-    scene.add(rain);
-
-    // ── COZY NOOK — triangular back shelf area ──
-    // Low shelf built into the A-frame nook
-    const nookShelfMat = new THREE.MeshStandardMaterial({
-      color: 0x3a2815, roughness: 0.82,
-      emissive: new THREE.Color(0x0a0604), emissiveIntensity: 0.08
-    });
-    // Bottom shelf
-    const nookShelf = new THREE.Mesh(new THREE.BoxGeometry(8, 0.14, 1.2), nookShelfMat);
-    nookShelf.position.set(0, -1.5, -13); scene.add(nookShelf);
-    // Upper shelf
-    const nookShelf2 = new THREE.Mesh(new THREE.BoxGeometry(6, 0.12, 0.9), nookShelfMat);
-    nookShelf2.position.set(0, 1.5, -13.2); scene.add(nookShelf2);
-
-    // Books stacked and leaning on shelves
-    const bookColors = [0x2a1e12, 0x4a3820, 0x3a4a3e, 0x2a2a3a, 0x4a3228, 0x3e3018, 0x1e2a22];
-    for (let i = 0; i < 8; i++) {
-      const bh = 0.7 + Math.random() * 0.5;
-      const bw = 0.22 + Math.random() * 0.12;
-      const book = new THREE.Mesh(
-        new THREE.BoxGeometry(bw, bh, 0.6),
-        new THREE.MeshStandardMaterial({
-          color: bookColors[i % bookColors.length], roughness: 0.85,
-          emissive: new THREE.Color(bookColors[i % bookColors.length]).multiplyScalar(0.15),
-          emissiveIntensity: 0.12
-        })
-      );
-      if (i < 5) {
-        book.position.set(-3.2 + i * 0.42, -1.5 + bh/2 + 0.08, -13);
-        book.rotation.y = (Math.random() - 0.5) * 0.15;
-      } else {
-        // Stacked horizontal on upper shelf
-        book.rotation.z = Math.PI / 2;
-        book.position.set(1.5 + (i-5) * 0.35, 1.5 + 0.12 + (i-5)*0.25, -13.1);
-      }
-      book.castShadow = true; scene.add(book);
-    }
-
-    // ── BED / SLEEPING AREA (low, on the floor) ──
-    const bedBase = new THREE.Mesh(
-      new THREE.BoxGeometry(10, 0.4, 7),
-      darkWoodMat
-    );
-    bedBase.position.set(0, -4.8, 2); bedBase.receiveShadow = true; scene.add(bedBase);
-
-    // Thick duvet — deep teal-green linen, rumpled
+    // Mattress / duvet — warm cream floral cottagecore
     const duvetMat = new THREE.MeshStandardMaterial({
-      color: 0x2a4a42, roughness: 0.96,
-      emissive: new THREE.Color(0x081a14), emissiveIntensity: 0.06
+      color: 0xede0c8,
+      roughness: 0.95,
+      emissive: new THREE.Color(0x4a2e10),
+      emissiveIntensity: 0.1
     });
-    const duvet = new THREE.Mesh(new THREE.BoxGeometry(9.5, 0.6, 6), duvetMat);
-    duvet.position.set(0.2, -4.2, 2.5); duvet.rotation.y = 0.03;
-    duvet.castShadow = true; scene.add(duvet);
+    const duvet = new THREE.Mesh(new THREE.BoxGeometry(8.6, 0.7, 5.4), duvetMat);
+    duvet.position.set(0.1, -4.05, 2.1);
+    duvet.castShadow = true;
+    scene.add(duvet);
 
-    // Rumpled fabric bumps
-    const bumpColors = [0x3a5a50, 0x2e4840, 0x3e6058, 0x2a4a44];
-    for (let i = 0; i < 7; i++) {
+    // Duvet wrinkle bumps
+    for (let i = 0; i < 5; i++) {
       const bump = new THREE.Mesh(
-        new THREE.SphereGeometry(0.4 + Math.random() * 0.6, 8, 6),
+        new THREE.SphereGeometry(0.5 + Math.random() * 0.5, 8, 6),
         new THREE.MeshStandardMaterial({
-          color: bumpColors[i % bumpColors.length], roughness: 1,
-          emissive: new THREE.Color(0x081510), emissiveIntensity: 0.04
+          color: 0xe0d0b0,
+          roughness: 1,
+          emissive: new THREE.Color(0x3a2208),
+          emissiveIntensity: 0.1
         })
       );
-      bump.scale.y = 0.18; bump.scale.x = 1 + Math.random() * 0.5;
-      bump.position.set((Math.random()-0.5) * 8, -3.7, 1 + Math.random() * 4);
-      bump.rotation.y = Math.random() * Math.PI;
+      bump.scale.y = 0.22;
+      bump.position.set((Math.random() - 0.5) * 7, -3.75, 1.5 + Math.random() * 2.5);
       scene.add(bump);
     }
 
-    // Scattered cushions & pillows
-    const cushionConfigs = [
-      { pos: [-3, -3.8, -0.2], color: 0x1e2e3e, s: [2.2, 0.55, 1.5], ry: -0.2 },
-      { pos: [0, -3.7, -0.3], color: 0x3a5a52, s: [2.0, 0.65, 1.6], ry: 0.1 },
-      { pos: [2.8, -3.8, 0], color: 0xb8a890, s: [2.3, 0.5, 1.5], ry: 0.3 },
-      { pos: [-1, -3.9, 0.5], color: 0x2a3848, s: [1.8, 0.5, 1.4], ry: -0.4 },
-      { pos: [1.5, -4.0, 3.5], color: 0x4a5a52, s: [1.6, 0.4, 1.3], ry: 0.8 },
-      { pos: [-2.5, -4.0, 3], color: 0x3a4a5a, s: [1.5, 0.4, 1.2], ry: -0.6 },
-    ];
-    cushionConfigs.forEach(({ pos, color, s, ry }) => {
-      const mat = new THREE.MeshStandardMaterial({
-        color, roughness: 0.92,
-        emissive: new THREE.Color(color).multiplyScalar(0.1), emissiveIntensity: 0.06
-      });
-      const c = new THREE.Mesh(new THREE.BoxGeometry(...s as [number,number,number]), mat);
-      c.position.set(...pos as [number,number,number]);
-      c.rotation.y = ry; c.castShadow = true; scene.add(c);
+    // Pillows — sage green, dusty rose, cream check (cottagecore palette)
+    const pillowMat = new THREE.MeshStandardMaterial({ color: 0xe8dcc4, roughness: 0.92, emissive: new THREE.Color(0x3a2010), emissiveIntensity: 0.12 });
+    const sagePillowMat = new THREE.MeshStandardMaterial({ color: 0x7a9a6a, roughness: 0.88, emissive: new THREE.Color(0x1a2a10), emissiveIntensity: 0.12 });
+    const rosePillowMat = new THREE.MeshStandardMaterial({ color: 0xc4907a, roughness: 0.9, emissive: new THREE.Color(0x3a1810), emissiveIntensity: 0.12 });
+    [
+      { pos: [-2.5, -3.5, -0.5], mat: pillowMat, s: [2.2, 0.6, 1.6] },
+      { pos: [0.2, -3.5, -0.5], mat: sagePillowMat, s: [2.0, 0.7, 1.6] },
+      { pos: [2.8, -3.5, -0.4], mat: rosePillowMat, s: [2.4, 0.55, 1.7] },
+    ].forEach(({ pos, mat, s }) => {
+      const p = new THREE.Mesh(new THREE.BoxGeometry(...s as [number,number,number]), mat);
+      p.position.set(...pos as [number,number,number]);
+      p.castShadow = true;
+      scene.add(p);
     });
 
-    // ── OPEN BOOK on the floor ──
-    const bookPageMat = new THREE.MeshStandardMaterial({
-      color: 0xd8ccb0, roughness: 0.75,
-      emissive: new THREE.Color(0x3a2810), emissiveIntensity: 0.15
+    // ── SHELVES on back wall ─────────────────────────────────
+    // Warm oak shelf
+    const shelfMat = new THREE.MeshStandardMaterial({
+      color: 0x9a6a3a,
+      roughness: 0.8,
+      emissive: new THREE.Color(0x2a1408),
+      emissiveIntensity: 0.15
     });
-    const leftPage = new THREE.Mesh(new THREE.BoxGeometry(1.0, 0.02, 1.4), bookPageMat);
-    leftPage.position.set(2.8, -4.55, 5); leftPage.rotation.y = 0.15;
-    leftPage.rotation.z = -0.08; scene.add(leftPage);
-    const rightPage = new THREE.Mesh(new THREE.BoxGeometry(1.0, 0.02, 1.4), bookPageMat);
-    rightPage.position.set(3.8, -4.55, 5); rightPage.rotation.y = 0.15;
-    rightPage.rotation.z = 0.08; scene.add(rightPage);
-    const bookSpine = new THREE.Mesh(
-      new THREE.BoxGeometry(0.08, 0.04, 1.4),
-      new THREE.MeshStandardMaterial({ color: 0x3a2212, roughness: 0.8 })
-    );
-    bookSpine.position.set(3.3, -4.55, 5); bookSpine.rotation.y = 0.15;
-    scene.add(bookSpine);
-    // Fake text lines on pages
-    const lineMat = new THREE.MeshBasicMaterial({ color: 0x4a3a28, transparent: true, opacity: 0.2 });
-    for (let pg = 0; pg < 2; pg++) {
-      for (let ln = 0; ln < 8; ln++) {
-        const line = new THREE.Mesh(new THREE.PlaneGeometry(0.7, 0.012), lineMat);
-        line.position.set(pg === 0 ? 2.8 : 3.8, -4.53, 4.5 + ln * 0.12);
-        line.rotation.x = -Math.PI / 2; line.rotation.z = 0.15;
-        scene.add(line);
-      }
+    const addShelf = (y: number, x: number, w: number) => {
+      const shelf = new THREE.Mesh(new THREE.BoxGeometry(w, 0.15, 0.8), shelfMat);
+      shelf.position.set(x, y, -13.5);
+      shelf.castShadow = true;
+      shelf.receiveShadow = true;
+      scene.add(shelf);
+      return shelf;
+    };
+
+    // Left shelf
+    addShelf(0.5, -6, 6);
+    // Right shelf
+    addShelf(1.2, 5, 5);
+    // Small upper shelf
+    addShelf(3.5, -7, 3.5);
+
+    // Books on left shelf — warm cottagecore palette
+    const bookColors = [0x8b5a2b, 0xc4845a, 0x6a8a5a, 0x7a6a9a, 0xb87a4a, 0xe8d090, 0x9a5a4a];
+    for (let i = 0; i < 7; i++) {
+      const bh = 0.8 + Math.random() * 0.6;
+      const bw = 0.25 + Math.random() * 0.15;
+      const book = new THREE.Mesh(
+        new THREE.BoxGeometry(bw, bh, 0.6),
+        new THREE.MeshStandardMaterial({
+          color: bookColors[i % bookColors.length],
+          roughness: 0.8,
+          emissive: new THREE.Color(bookColors[i % bookColors.length]).multiplyScalar(0.25),
+          emissiveIntensity: 0.2
+        })
+      );
+      book.position.set(-8.5 + i * 0.45 + Math.random() * 0.08, 0.5 + bh / 2 + 0.08, -13.5);
+      book.rotation.y = (Math.random() - 0.5) * 0.12;
+      book.castShadow = true;
+      scene.add(book);
     }
 
-    // ── CANDLES (multiple, scattered around the nook) ──
-    const candleWax = new THREE.MeshStandardMaterial({
-      color: 0xd4c4a0, roughness: 0.65,
-      emissive: new THREE.Color(0x3a2810), emissiveIntensity: 0.12
+    // Small plant pot on right shelf — terracotta
+    const potMat = new THREE.MeshStandardMaterial({
+      color: 0xc4703a,
+      roughness: 0.85,
+      emissive: new THREE.Color(0x4a1a08),
+      emissiveIntensity: 0.2
     });
-    const flameMat = new THREE.MeshStandardMaterial({
-      color: 0xffaa30, emissive: new THREE.Color(0xff8800),
-      emissiveIntensity: 3.5, transparent: true, opacity: 0.92
+    const pot = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.22, 0.55, 10), potMat);
+    pot.position.set(4.5, 1.2 + 0.28, -13.5);
+    pot.castShadow = true;
+    scene.add(pot);
+    // Soil
+    const soil = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.28, 0.05, 10),
+      new THREE.MeshStandardMaterial({ color: 0x3a2010, roughness: 1 }));
+    soil.position.set(4.5, 1.2 + 0.56, -13.5);
+    scene.add(soil);
+
+    // Small clock on shelf — cream face
+    const clockFace = new THREE.Mesh(new THREE.CylinderGeometry(0.45, 0.45, 0.12, 24),
+      new THREE.MeshStandardMaterial({
+        color: 0xe8d8b8,
+        roughness: 0.5,
+        emissive: new THREE.Color(0x4a2e10),
+        emissiveIntensity: 0.15
+      }));
+    clockFace.rotation.x = Math.PI / 2;
+    clockFace.position.set(6.5, 1.2 + 0.5, -13.4);
+    scene.add(clockFace);
+
+    // Frames on back wall — warm wood frames with botanical art colors
+    const frameMat = new THREE.MeshStandardMaterial({
+      color: 0x8a5a2a,
+      roughness: 0.75,
+      emissive: new THREE.Color(0x2a1008),
+      emissiveIntensity: 0.18
     });
-    const candleSpots = [
-      {p: [3.2, -1.5, -12.8], h: 0.8, r: 0.1},
-      {p: [3.8, -1.5, -12.7], h: 0.55, r: 0.08},
-      {p: [-2.5, -1.5, -12.9], h: 0.65, r: 0.09},
-      {p: [5, -4.3, 1], h: 0.7, r: 0.07},
-      {p: [4.5, -4.3, 0.4], h: 0.5, r: 0.065},
+    const artColors = [0x8aaa7a, 0xc4906a, 0xa4b898, 0xd4b87a];
+    [[-4.5, 2.5], [-1.5, 3.0], [2.5, 2.2], [5.5, 3.4]].forEach(([fx, fy], idx) => {
+      const fw = 1.4 + Math.random() * 0.6;
+      const fh = 1.8 + Math.random() * 0.4;
+      const frame = new THREE.Mesh(new THREE.BoxGeometry(fw + 0.15, fh + 0.15, 0.08), frameMat);
+      frame.position.set(fx, fy, -13.85);
+      scene.add(frame);
+      const art = new THREE.Mesh(new THREE.PlaneGeometry(fw, fh),
+        new THREE.MeshStandardMaterial({
+          color: artColors[idx % artColors.length],
+          roughness: 0.85,
+          emissive: new THREE.Color(artColors[idx % artColors.length]).multiplyScalar(0.3),
+          emissiveIntensity: 0.2
+        }));
+      art.position.set(fx, fy, -13.8);
+      scene.add(art);
+    });
+
+    // Vinyl records on wall — dark with warm labels
+    const vinylMat = new THREE.MeshStandardMaterial({ color: 0x2a1e14, roughness: 0.4, metalness: 0.3 });
+    [[8, 4.5], [9.5, 3.0]].forEach(([vx, vy]) => {
+      const vinyl = new THREE.Mesh(new THREE.CylinderGeometry(0.7, 0.7, 0.05, 32), vinylMat);
+      vinyl.rotation.x = Math.PI / 2;
+      vinyl.position.set(vx, vy, -13.8);
+      scene.add(vinyl);
+      const label = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.22, 0.06, 20),
+        new THREE.MeshStandardMaterial({
+          color: 0xd4784a,
+          roughness: 0.5,
+          emissive: new THREE.Color(0x6a2810),
+          emissiveIntensity: 0.3
+        }));
+      label.rotation.x = Math.PI / 2;
+      label.position.set(vx, vy, -13.75);
+      scene.add(label);
+    });
+
+    // ── HANGING VINES FROM CEILING ───────────────────────────
+    const vineGroup = new THREE.Group();
+    vineGroupRef.current = vineGroup;
+
+    const stemMat = new THREE.MeshStandardMaterial({
+      color: 0x4a6a2e,
+      roughness: 0.85,
+      emissive: new THREE.Color(0x1a2a08),
+      emissiveIntensity: 0.2
+    });
+    const leafMat = new THREE.MeshStandardMaterial({
+      color: 0x5a8a30,
+      roughness: 0.8,
+      side: THREE.DoubleSide,
+      emissive: new THREE.Color(0x1e3a08),
+      emissiveIntensity: 0.25
+    });
+    const leafMat2 = new THREE.MeshStandardMaterial({
+      color: 0x7aaa4a,
+      roughness: 0.78,
+      side: THREE.DoubleSide,
+      emissive: new THREE.Color(0x2a4a10),
+      emissiveIntensity: 0.22
+    });
+
+    // Ceiling vine tendrils — sweeping across ceiling
+    const vineConfigs = [
+      { startX: -8, startZ: -8, endX: 4, endZ: -2, segs: 14, dropY: 1.5 },
+      { startX: -6, startZ: -6, endX: 6, endZ: 2, segs: 16, dropY: 2.2 },
+      { startX: -3, startZ: -12, endX: 8, endZ: -4, segs: 12, dropY: 1.0 },
+      { startX: 2, startZ: -10, endX: -5, endZ: 0, segs: 13, dropY: 1.8 },
+      { startX: -9, startZ: 0, endX: 3, endZ: -10, segs: 11, dropY: 1.2 },
     ];
-    candleSpots.forEach(({p, h, r}) => {
-      const candle = new THREE.Mesh(new THREE.CylinderGeometry(r, r, h, 8), candleWax);
-      candle.position.set(p[0], p[1] + h/2, p[2]); candle.castShadow = true;
-      scene.add(candle);
-      const flame = new THREE.Mesh(new THREE.SphereGeometry(r * 0.7, 8, 6), flameMat);
-      flame.scale.y = 2.0;
-      flame.position.set(p[0], p[1] + h + r * 0.4, p[2]);
-      scene.add(flame);
+
+    vineConfigs.forEach(({ startX, startZ, endX, endZ, segs, dropY }) => {
+      for (let s = 0; s < segs; s++) {
+        const t = s / segs;
+        const x = startX + (endX - startX) * t + (Math.random() - 0.5) * 0.8;
+        const z = startZ + (endZ - startZ) * t + (Math.random() - 0.5) * 0.8;
+        // Slight sag in the middle
+        const sag = Math.sin(t * Math.PI) * dropY;
+        const y = 9.6 - sag;
+
+        // Stem segment
+        const stemH = 0.12 + Math.random() * 0.1;
+        const stem = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, stemH, 5), stemMat);
+        stem.position.set(x, y - stemH / 2, z);
+        vineGroup.add(stem);
+
+        // Leaf at each node
+        if (Math.random() > 0.25) {
+          const leafSize = 0.18 + Math.random() * 0.22;
+          const leafGeo = new THREE.SphereGeometry(leafSize, 6, 5);
+          leafGeo.scale(1, 0.35, 0.85);
+          const leaf = new THREE.Mesh(leafGeo, Math.random() > 0.4 ? leafMat : leafMat2);
+          leaf.position.set(
+            x + (Math.random() - 0.5) * 0.4,
+            y - sag * 0.15 - 0.05,
+            z + (Math.random() - 0.5) * 0.3
+          );
+          leaf.rotation.set(
+            (Math.random() - 0.5) * 0.6,
+            Math.random() * Math.PI * 2,
+            (Math.random() - 0.5) * 0.5
+          );
+          vineGroup.add(leaf);
+        }
+      }
     });
 
-    // Candle glow lights - Brighter for warmth
-    const lampLight = new THREE.PointLight(0xffbe60, 5.0, 16);
-    lampLight.position.set(3.5, -0.5, -12.5); lampLight.castShadow = true;
-    scene.add(lampLight); lampLightRef.current = lampLight;
-    const candleLight2 = new THREE.PointLight(0xffbe60, 3.5, 12);
-    candleLight2.position.set(4.8, -3.5, 0.7); scene.add(candleLight2);
-    const candleLight3 = new THREE.PointLight(0xffa840, 2.5, 10);
-    candleLight3.position.set(-2.5, -0.5, -12.5); scene.add(candleLight3);
+    // Hanging trailing vines (hanging down from ceiling corners)
+    const hangingVinePositions = [[-9, -10], [7, -11], [-8, -3], [6, -5], [0, -12]];
+    hangingVinePositions.forEach(([hvx, hvz]) => {
+      const dropLen = 2.5 + Math.random() * 3.5;
+      const numLeaves = Math.floor(8 + Math.random() * 8);
+      for (let h = 0; h < numLeaves; h++) {
+        const ht = h / numLeaves;
+        const yy = 9.4 - ht * dropLen;
+        const xOff = Math.sin(ht * Math.PI * 2.5) * 0.3;
 
-    // ── FAIRY / STRING LIGHTS in the A-frame peak ──
-    const fairyCount = 80;
+        if (h % 2 === 0) {
+          const stemSeg = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.018, 0.35, 5), stemMat);
+          stemSeg.position.set(hvx + xOff, yy, hvz);
+          vineGroup.add(stemSeg);
+        }
+
+        const leafSize = 0.14 + Math.random() * 0.18;
+        const leafGeo2 = new THREE.SphereGeometry(leafSize, 6, 5);
+        leafGeo2.scale(1, 0.3, 0.8);
+        const hleaf = new THREE.Mesh(leafGeo2, Math.random() > 0.5 ? leafMat : leafMat2);
+        hleaf.position.set(
+          hvx + xOff + (Math.random() - 0.5) * 0.5,
+          yy + 0.1,
+          hvz + (Math.random() - 0.5) * 0.4
+        );
+        hleaf.rotation.set(
+          (Math.random() - 0.5) * 1.2,
+          Math.random() * Math.PI * 2,
+          (Math.random() - 0.5) * 0.8
+        );
+        vineGroup.add(hleaf);
+      }
+    });
+
+    scene.add(vineGroup);
+
+    // ── LAMP (bedside) ───────────────────────────────────────
+    // Lamp base — brushed brass
+    const lampBase = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.18, 0.25, 0.15, 12),
+      new THREE.MeshStandardMaterial({ color: 0xc8a040, roughness: 0.4, metalness: 0.7 })
+    );
+    lampBase.position.set(-5.5, -4.5, 0.5);
+    scene.add(lampBase);
+
+    // Lamp pole — brass
+    const lampPole = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.05, 0.05, 2.2, 8),
+      new THREE.MeshStandardMaterial({ color: 0xd4aa40, roughness: 0.25, metalness: 0.9 })
+    );
+    lampPole.position.set(-5.5, -3.3, 0.5);
+    scene.add(lampPole);
+
+    // Lamp shade — warm amber mosaic glow
+    const shadeMat = new THREE.MeshStandardMaterial({
+      color: 0xe88a2a,
+      roughness: 0.5,
+      transparent: true,
+      opacity: 0.88,
+      side: THREE.DoubleSide,
+      emissive: new THREE.Color(0xd06010),
+      emissiveIntensity: 1.0
+    });
+    const shade = new THREE.Mesh(new THREE.ConeGeometry(0.7, 0.9, 8, 1, true), shadeMat);
+    shade.position.set(-5.5, -1.85, 0.5);
+    scene.add(shade);
+
+    // Lamp point light — strong warm amber glow
+    const lampLight = new THREE.PointLight(0xffaa40, 8.0, 18);
+    lampLight.position.set(-5.5, -2.0, 0.5);
+    lampLight.castShadow = true;
+    scene.add(lampLight);
+    lampLightRef.current = lampLight;
+
+    // Nightstand — warm oak
+    const nightstand = new THREE.Mesh(
+      new THREE.BoxGeometry(1.8, 1.4, 1.5),
+      new THREE.MeshStandardMaterial({
+        color: 0x8a5a2a,
+        roughness: 0.8,
+        emissive: new THREE.Color(0x2a1408),
+        emissiveIntensity: 0.15
+      })
+    );
+    nightstand.position.set(-5.5, -4.3, 0.5);
+    nightstand.castShadow = true;
+    nightstand.receiveShadow = true;
+    scene.add(nightstand);
+
+    // ── FAIRY LIGHTS strung across room ─────────────────────
+    const fairyCount = 60;
     const fairyGeo = new THREE.BufferGeometry();
     const fairyPos = new Float32Array(fairyCount * 3);
     const fairyColors = new Float32Array(fairyCount * 3);
+
     for (let i = 0; i < fairyCount; i++) {
       const t2 = i / fairyCount;
-      // Drape along the A-frame ridge and down the slopes
-      const sx = (Math.random() - 0.5) * 12;
-      const maxH = 9 - Math.abs(sx) * 0.4;
-      fairyPos[i*3]   = sx;
-      fairyPos[i*3+1] = maxH - Math.random() * 1.5;
-      fairyPos[i*3+2] = -12 + t2 * 18 + (Math.random()-0.5) * 2;
-      fairyColors[i*3]   = 1.0;
-      fairyColors[i*3+1] = 0.82 + Math.random() * 0.18;
-      fairyColors[i*3+2] = 0.35 + Math.random() * 0.25;
+      // String across top of back wall in a curve
+      fairyPos[i * 3] = -10 + t2 * 20 + Math.sin(t2 * Math.PI * 4) * 0.3;
+      fairyPos[i * 3 + 1] = 6.5 + Math.sin(t2 * Math.PI) * 1.5 + (Math.random() - 0.5) * 0.3;
+      fairyPos[i * 3 + 2] = -12 + Math.random() * 0.5;
+      // Warm whites / ambers
+      fairyColors[i * 3] = 1.0;
+      fairyColors[i * 3 + 1] = 0.85 + Math.random() * 0.15;
+      fairyColors[i * 3 + 2] = 0.4 + Math.random() * 0.3;
     }
     fairyGeo.setAttribute('position', new THREE.BufferAttribute(fairyPos, 3));
     fairyGeo.setAttribute('color', new THREE.BufferAttribute(fairyColors, 3));
+
     const fairyMat = new THREE.PointsMaterial({
-      size: 0.28, vertexColors: true, transparent: true, opacity: 0.95, sizeAttenuation: true
+      size: 0.32,
+      vertexColors: true,
+      transparent: true,
+      opacity: 1.0,
+      sizeAttenuation: true
     });
     const fairyLights = new THREE.Points(fairyGeo, fairyMat);
-    scene.add(fairyLights); fairyLightsRef.current = fairyLights;
+    scene.add(fairyLights);
+    fairyLightsRef.current = fairyLights;
 
-    // Fairy light area glow
-    const fg1 = new THREE.PointLight(0xffaa30, 1.5, 14);
-    fg1.position.set(-3, 7, -6); scene.add(fg1);
-    const fg2 = new THREE.PointLight(0xffcc50, 1.2, 12);
-    fg2.position.set(3, 7, -2); scene.add(fg2);
+    // Fairy light warm area glow — much stronger
+    const fairyGlow1 = new THREE.PointLight(0xffaa30, 2.5, 14);
+    fairyGlow1.position.set(-5, 6.5, -11);
+    scene.add(fairyGlow1);
+    const fairyGlow2 = new THREE.PointLight(0xffcc50, 2.0, 12);
+    fairyGlow2.position.set(5, 6.5, -11);
+    scene.add(fairyGlow2);
 
-    // ── VINE GROUP (minimal — just a subtle ref so animations don't crash) ──
-    const vineGroup = new THREE.Group();
-    vineGroupRef.current = vineGroup;
-    scene.add(vineGroup);
-
-    // ── DUST PARTICLES floating in candlelight ──
+    // ── DUST PARTICLES floating in lamp light ────────────────
     const dustParticles = buildParticles();
     scene.add(dustParticles);
 
@@ -584,10 +716,10 @@ export default function Vault({
     }
     geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
     return new THREE.Points(geo, new THREE.PointsMaterial({
-      color: 0xcc8840,
-      size: 0.035,
+      color: 0xffa050,
+      size: 0.04,
       transparent: true,
-      opacity: 0.15,
+      opacity: 0.22,
       sizeAttenuation: true
     }));
   };
@@ -598,9 +730,9 @@ export default function Vault({
     scene.children.filter(c => (c as any).isLight).forEach(l => scene.remove(l));
 
     const configs: any = {
-      golden: { ambient: [0xffaa60, 1.2], dir: [0xffbb60, 1.0], bg: 0x0e0c08, fog: 0x1a1510 },
-      night:  { ambient: [0x5070a0, 0.8], dir: [0x7090bb, 0.7], bg: 0x060810, fog: 0x101420 },
-      morning:{ ambient: [0xffaa70, 1.0], dir: [0xffcc80, 0.9], bg: 0x0e0c08, fog: 0x1a1510 }
+      golden: { ambient: [0xff8c30, 1.4], dir: [0xffcc60, 1.2], bg: 0x3d2810, fog: 0x6b4a2a },
+      night:  { ambient: [0x3040a0, 0.6], dir: [0x6080ff, 0.5], bg: 0x14101e, fog: 0x2a2040 },
+      morning:{ ambient: [0xffa050, 1.2], dir: [0xffd080, 1.0], bg: 0x3a2410, fog: 0x6a4a28 }
     };
 
     const c = configs[mood] || configs.golden;
@@ -698,36 +830,22 @@ export default function Vault({
       obj.rotation.y += 0.002;
     });
 
-    // Gently sway vine group (if exists)
+    // Gently sway vine group
     if (vineGroupRef.current) {
       vineGroupRef.current.rotation.z = Math.sin(t * 0.18) * 0.012;
       vineGroupRef.current.rotation.x = Math.sin(t * 0.13 + 1.0) * 0.008;
     }
 
-    // Candle flicker — subtle warm pulse
+    // Lamp flicker — subtle warm pulse
     if (lampLightRef.current) {
-      lampLightRef.current.intensity = 3.2 + Math.sin(t * 3.1) * 0.3 + Math.sin(t * 8.5) * 0.15;
+      lampLightRef.current.intensity = 7.5 + Math.sin(t * 2.3) * 0.4 + Math.sin(t * 7.1) * 0.15;
     }
 
     // Fairy lights twinkle
     if (fairyLightsRef.current) {
       (fairyLightsRef.current.material as THREE.PointsMaterial).opacity =
-        0.8 + Math.sin(t * 1.2) * 0.15;
+        0.85 + Math.sin(t * 1.5) * 0.12;
     }
-
-    // Rain animation — particles fall and loop
-    sceneRef.current.children.forEach(child => {
-      if (child.userData.isRain && child instanceof THREE.Points) {
-        const positions = (child.geometry as THREE.BufferGeometry).getAttribute('position') as THREE.BufferAttribute;
-        for (let i = 0; i < positions.count; i++) {
-          let y = positions.getY(i);
-          y -= 0.12; // fall speed
-          if (y < -5) y = 10 + Math.random() * 2;
-          positions.setY(i, y);
-        }
-        positions.needsUpdate = true;
-      }
-    });
 
     rendererRef.current.render(sceneRef.current, cameraRef.current);
   };
