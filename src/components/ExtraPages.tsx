@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, Sparkles, BookOpen, Search, Leaf, FolderHeart, History, Music, Check, Edit2, Star, Heart, Camera as CameraIcon, Mic, Type, Play, SkipBack, SkipForward, Smile, Pin } from 'lucide-react';
-import { Memory, Album, DayReaction } from '../lib/groq';
+import { Memory, Album, DayReaction, searchMemories } from '../lib/groq';
 import CalendarView from './CalendarView';
 import AlbumDetail from './AlbumDetail';
 import MusicPlayer from './MusicPlayer';
@@ -38,6 +38,11 @@ export default function ExtraPages({
   const [selectedAlbum, setSelectedAlbum] = useState<Album | null>(null);
   const [editingAlbumId, setEditingAlbumId] = useState<string | null>(null);
   const [editTitleValue, setEditTitleValue] = useState('');
+  
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isSearching, setIsSearching] = useState(false);
+  const [searchResult, setSearchResult] = useState<{intro: string, memoryId: string | null} | null>(null);
+  const [searchError, setSearchError] = useState<string | null>(null);
 
   if (!activeOverlay) return null;
 
@@ -49,6 +54,21 @@ export default function ExtraPages({
   const saveAlbumTitle = (albumId: string) => {
     onUpdateAlbumTitle(albumId, editTitleValue);
     setEditingAlbumId(null);
+  };
+
+  const handleSearch = async () => {
+    if (!searchQuery.trim() || isSearching) return;
+    setIsSearching(true);
+    setSearchError(null);
+    setSearchResult(null);
+    try {
+      const result = await searchMemories(searchQuery, memories);
+      setSearchResult(result);
+    } catch (e: any) {
+      setSearchError(e.message || "Failed to search memories.");
+    } finally {
+      setIsSearching(false);
+    }
   };
 
   return (
@@ -114,13 +134,58 @@ export default function ExtraPages({
                 <textarea 
                   className="w-full border-none outline-none bg-transparent font-hand text-3xl text-ink resize-none leading-[2.5rem] min-h-[120px] placeholder:text-brown/40" 
                   placeholder="that late-night idea about the garden…" 
-                  rows={3} 
+                  rows={3}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && (e.preventDefault(), handleSearch())}
                 />
                 <button 
-                  className="mt-8 px-10 py-4 bg-moss text-cream font-hand text-xl cursor-pointer rounded-[2px] transition-all hover:bg-dark-brown hover:-translate-y-px tracking-wider shadow-lg"
+                  onClick={handleSearch}
+                  disabled={isSearching}
+                  className="mt-8 px-10 py-4 bg-moss text-cream font-hand text-xl cursor-pointer rounded-[2px] transition-all hover:bg-dark-brown hover:-translate-y-px tracking-wider shadow-lg disabled:opacity-50 flex items-center gap-2"
                 >
-                  Find it in my Reminiq →
+                  {isSearching ? <span className="animate-spin">◌</span> : null}
+                  {isSearching ? 'Searching...' : 'Find it in my Reminiq →'}
                 </button>
+                
+                {searchError && (
+                  <div className="mt-8 p-4 bg-red-50 text-red-800 font-hand text-lg border border-red-200">
+                    {searchError}
+                  </div>
+                )}
+                
+                <AnimatePresence>
+                  {searchResult && (
+                    <motion.div 
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                      className="mt-12 pt-8 border-t border-brown/20"
+                    >
+                      <p className="font-hand text-2xl text-dark-brown italic mb-6">"{searchResult.intro}"</p>
+                      
+                      {searchResult.memoryId && (
+                        (() => {
+                          const mem = memories.find(m => m.id === searchResult.memoryId);
+                          if (!mem) return null;
+                          return (
+                            <div className="bg-white p-6 shadow-md border border-brown/10 transform rotate-1">
+                              {mem.photoUrl && (
+                                <img src={mem.photoUrl} className="w-full h-48 object-cover mb-4" referrerPolicy="no-referrer" />
+                              )}
+                              <h3 className="font-serif text-xl text-dark-brown mb-2">{mem.title}</h3>
+                              <p className="font-hand text-lg text-brown/80 mb-4">{mem.desc}</p>
+                              <div className="flex items-center gap-4 font-hand text-sm text-brown/50">
+                                <span>{new Date(mem.date).toLocaleDateString()}</span>
+                                {mem.location && <span>• {mem.location}</span>}
+                              </div>
+                            </div>
+                          );
+                        })()
+                      )}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             </div>
           </section>

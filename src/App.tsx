@@ -3,7 +3,6 @@ import LandingPage from './components/LandingPage';
 import Vault from './components/Vault';
 import Taskbar from './components/Taskbar';
 import ExtraPages from './components/ExtraPages';
-import SmartChat from './components/SmartChat';
 import { Memory, Album, DayReaction, sortMemoriesIntoAlbums } from './lib/groq';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -203,10 +202,7 @@ export default function App() {
     setActiveOverlay(null);
   };
 
-  const handleSuggestAlbum = (album: Album) => {
-    setAlbums(prev => [album, ...prev]);
-    setActiveOverlay('albums');
-  };
+
 
   const [isApiKeyModalOpen, setIsApiKeyModalOpen] = useState(false);
   const [apiKey, setApiKey] = useState(localStorage.getItem('REMINIQ_GROQ_API_KEY') || '');
@@ -375,11 +371,6 @@ export default function App() {
           </motion.div>
         )}
       </AnimatePresence>
-
-      <SmartChat 
-        memories={memories} 
-        onSuggestAlbum={handleSuggestAlbum} 
-      />
     </main>
   );
 }
