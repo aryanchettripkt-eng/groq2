@@ -36,6 +36,7 @@ interface VaultProps {
   onBack: () => void;
   memories: Memory[];
   onAddMemory: (memory: Memory) => void;
+  onDeleteMemory: (memoryId: string) => void;
   albums: Album[];
   onUpdateAlbums: (albums: Album[]) => void;
   onUpdateAlbumTitle: (albumId: string, newTitle: string) => void;
@@ -57,13 +58,13 @@ interface VaultProps {
   onFetchPhotos: (token: string) => void;
   spotifyToken: string | null;
   onConnectSpotify: () => void;
-  onOpenSettings: () => void;
 }
 
 export default function Vault({ 
   onBack, 
   memories, 
   onAddMemory, 
+  onDeleteMemory,
   albums, 
   onUpdateAlbums, 
   onUpdateAlbumTitle,
@@ -84,8 +85,7 @@ export default function Vault({
   onConnectGoogle,
   onFetchPhotos,
   spotifyToken,
-  onConnectSpotify,
-  onOpenSettings
+  onConnectSpotify
 }: VaultProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [selectedMemory, setSelectedMemory] = useState<Memory | null>(null);
@@ -967,13 +967,6 @@ export default function Vault({
               </>
             )}
           </button>
-          <button 
-            onClick={onOpenSettings}
-            className="bg-parchment/80 border border-light-brown/20 text-brown font-hand text-sm px-3 py-1.5 rounded-full hover:bg-brown/10 transition-all backdrop-blur-md shadow-sm flex items-center gap-2"
-            title="API Settings"
-          >
-            <Settings size={14} />
-          </button>
         </div>
       </div>
 
@@ -1291,14 +1284,27 @@ export default function Vault({
             exit={{ x: '100%' }}
             className="fixed top-0 right-0 bottom-0 w-full sm:w-[360px] bg-warm-white/95 backdrop-blur-2xl border-l border-light-brown/15 p-8 z-[6000] overflow-y-auto shadow-2xl"
           >
-            <button onClick={() => setSelectedMemory(null)} className="absolute top-4 right-4 text-brown/30 hover:text-dusty-rose">✕ close</button>
-            <div className="inline-block font-hand text-[10px] text-sage border border-sage/30 px-2.5 py-0.5 rounded-full uppercase tracking-widest mb-4">{selectedMemory.type}</div>
-            
-            {selectedMemory.emotion && (
-              <div className="inline-block ml-2 font-hand text-[10px] bg-dusty-rose/10 text-dusty-rose border border-dusty-rose/20 px-2.5 py-0.5 rounded-full uppercase tracking-widest mb-4">
-                {selectedMemory.emotion}
+            <div className="flex justify-between items-start mb-4">
+              <div>
+                <div className="inline-block font-hand text-[10px] text-sage border border-sage/30 px-2.5 py-0.5 rounded-full uppercase tracking-widest">{selectedMemory.type}</div>
+                
+                {selectedMemory.emotion && (
+                  <div className="inline-block ml-2 font-hand text-[10px] bg-dusty-rose/10 text-dusty-rose border border-dusty-rose/20 px-2.5 py-0.5 rounded-full uppercase tracking-widest">
+                    {selectedMemory.emotion}
+                  </div>
+                )}
               </div>
-            )}
+              <button 
+                onClick={() => {
+                  onDeleteMemory(selectedMemory.id);
+                  setSelectedMemory(null);
+                }}
+                className="text-brown/30 hover:text-red-500 transition-colors"
+                title="Delete memory"
+              >
+                <Trash2 size={16} />
+              </button>
+            </div>
 
             <div className="date-stamp text-lg mb-3">{new Date(selectedMemory.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</div>
             <h3 className="font-serif text-xl text-dark-brown italic mb-4 leading-tight">{selectedMemory.title}</h3>

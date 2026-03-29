@@ -13,18 +13,16 @@ import {
   Download, 
   Trash2, 
   ArrowRight, 
-  Sparkles,
-  Settings
+  Sparkles
 } from 'lucide-react';
 import { searchMemories, Memory } from '../lib/groq';
 
 interface LandingPageProps {
   onEnterVault: () => void;
   memories: Memory[];
-  onOpenSettings: () => void;
 }
 
-export default function LandingPage({ onEnterVault, memories, onOpenSettings }: LandingPageProps) {
+export default function LandingPage({ onEnterVault, memories }: LandingPageProps) {
   const [demoQuery, setDemoQuery] = useState('');
   const [demoResult, setDemoResult] = useState<{ intro: string; memoryId: string | null } | null>(null);
   const [isSearching, setIsSearching] = useState(false);
@@ -186,13 +184,6 @@ export default function LandingPage({ onEnterVault, memories, onOpenSettings }: 
         <a href="#" className="font-serif text-xl text-dark-brown flex items-center gap-2">
           Reminiq
         </a>
-        <button 
-          onClick={onOpenSettings}
-          className="p-2 text-brown/60 hover:text-brown transition-colors"
-          title="API Settings"
-        >
-          <Settings size={20} />
-        </button>
       </nav>
 
       {/* Hero */}

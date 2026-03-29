@@ -8,8 +8,7 @@ import {
   Music, 
   History,
   Home,
-  BookOpen,
-  Settings
+  BookOpen
 } from 'lucide-react';
 
 interface TaskbarProps {
@@ -17,18 +16,16 @@ interface TaskbarProps {
   onViewChange: (view: 'landing' | 'vault') => void;
   activeOverlay: string | null;
   onOverlayChange: (overlay: string | null) => void;
-  onOpenSettings: () => void;
 }
 
-export default function Taskbar({ view, onViewChange, activeOverlay, onOverlayChange, onOpenSettings }: TaskbarProps) {
+export default function Taskbar({ view, onViewChange, activeOverlay, onOverlayChange }: TaskbarProps) {
   const items = [
     { id: 'features', icon: <Sparkles size={20} />, label: 'Features', type: 'overlay' },
     { id: 'try-it', icon: <Search size={20} />, label: 'Try It', type: 'overlay' },
     { id: 'calendar', icon: <Calendar size={20} />, label: 'Calendar', type: 'overlay' },
     { id: 'albums', icon: <FolderHeart size={20} />, label: 'Albums', type: 'overlay' },
     { id: 'timeline', icon: <History size={20} />, label: 'Timeline', type: 'overlay' },
-    { id: 'scrapbook', icon: <BookOpen size={20} />, label: 'Journal', type: 'overlay' },
-    { id: 'music', icon: <Music size={20} />, label: 'Music', type: 'overlay' },
+    { id: 'scrapbook', icon: <BookOpen size={20} />, label: 'Journal', type: 'overlay' }
   ];
 
   return (
@@ -64,18 +61,6 @@ export default function Taskbar({ view, onViewChange, activeOverlay, onOverlayCh
           </button>
         );
       })}
-      
-      <div className="w-[1px] h-6 bg-brown/20 mx-1" />
-      
-      <button
-        onClick={onOpenSettings}
-        className="relative group flex flex-col items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full transition-all flex-shrink-0 text-brown hover:bg-brown/10"
-      >
-        <Settings size={20} />
-        <span className="absolute -top-10 left-1/2 -translate-x-1/2 px-2 py-1 bg-moss text-cream text-[10px] font-hand rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap hidden sm:block">
-          Settings
-        </span>
-      </button>
     </div>
   );
 }

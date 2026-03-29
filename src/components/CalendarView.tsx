@@ -11,7 +11,8 @@ import {
   Image as ImageIcon,
   SmilePlus,
   Clock,
-  BookOpen
+  BookOpen,
+  Trash2
 } from 'lucide-react';
 import { Memory, DayReaction } from '../lib/groq';
 
@@ -21,6 +22,7 @@ interface CalendarViewProps {
   onUpdateDayReaction: (date: string, data: Partial<DayReaction>) => void;
   onClose: () => void;
   onAddMemoryAtDate: (date: string) => void;
+  onDeleteMemory: (memoryId: string) => void;
 }
 
 export default function CalendarView({ 
@@ -28,7 +30,8 @@ export default function CalendarView({
   dayReactions,
   onUpdateDayReaction,
   onClose, 
-  onAddMemoryAtDate 
+  onAddMemoryAtDate,
+  onDeleteMemory
 }: CalendarViewProps) {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -321,10 +324,21 @@ export default function CalendarView({
                             </div>
                             <h4 className="font-serif text-xl text-dark-brown italic">{mem.title}</h4>
                           </div>
-                          <div className="flex gap-2">
+                          <div className="flex gap-2 items-center">
                             {mem.type === 'photo' && <ImageIcon size={18} className="text-moss" />}
                             {mem.type === 'voice' && <Mic size={18} className="text-moss" />}
                             {mem.type === 'music' && <MusicIcon size={18} className="text-moss" />}
+                            
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                onDeleteMemory(mem.id);
+                              }}
+                              className="ml-2 text-brown/30 hover:text-red-500 transition-colors"
+                              title="Delete memory"
+                            >
+                              <Trash2 size={16} />
+                            </button>
                           </div>
                         </div>
 

@@ -154,6 +154,14 @@ export default function App() {
     setMemories(prev => [memory, ...prev]);
   };
 
+  const deleteMemory = (memoryId: string) => {
+    setMemories(prev => prev.filter(m => m.id !== memoryId));
+    setAlbums(prev => prev.map(a => ({
+      ...a,
+      memoryIds: a.memoryIds.filter(id => id !== memoryId)
+    })));
+  };
+
   const updateAlbums = (newAlbums: Album[]) => {
     setAlbums(newAlbums);
   };
@@ -204,8 +212,6 @@ export default function App() {
 
 
 
-  const [isApiKeyModalOpen, setIsApiKeyModalOpen] = useState(false);
-  const [apiKey, setApiKey] = useState(localStorage.getItem('REMINIQ_GROQ_API_KEY') || '');
   const [toast, setToast] = useState<{ message: string; type: 'error' | 'success' } | null>(null);
 
   useEffect(() => {
@@ -214,22 +220,6 @@ export default function App() {
       return () => clearTimeout(timer);
     }
   }, [toast]);
-
-  const saveApiKey = (key: string) => {
-    localStorage.setItem('REMINIQ_GROQ_API_KEY', key);
-    setApiKey(key);
-    setIsApiKeyModalOpen(false);
-    setToast({ message: 'API Key saved successfully. Refreshing...', type: 'success' });
-    // Reload to ensure the new key is picked up by getGroqKey
-    setTimeout(() => window.location.reload(), 1500);
-  };
-
-  const clearApiKey = () => {
-    localStorage.removeItem('REMINIQ_GROQ_API_KEY');
-    setApiKey('');
-    setToast({ message: 'API Key cleared. Using environment variables if available.', type: 'success' });
-    setTimeout(() => window.location.reload(), 1500);
-  };
 
   return (
     <main className="min-h-screen">
@@ -240,13 +230,13 @@ export default function App() {
         <LandingPage 
           onEnterVault={() => setView('vault')} 
           memories={memories} 
-          onOpenSettings={() => setIsApiKeyModalOpen(true)}
         />
       ) : (
         <Vault 
           onBack={() => setView('landing')} 
           memories={memories} 
           onAddMemory={addMemory}
+          onDeleteMemory={deleteMemory}
           albums={albums}
           onUpdateAlbums={updateAlbums}
           onUpdateAlbumTitle={updateAlbumTitle}
@@ -268,7 +258,6 @@ export default function App() {
           onFetchPhotos={fetchGooglePhotos}
           spotifyToken={spotifyToken}
           onConnectSpotify={connectSpotify}
-          onOpenSettings={() => setIsApiKeyModalOpen(true)}
         />
       )}
 
@@ -277,7 +266,6 @@ export default function App() {
         onViewChange={setView} 
         activeOverlay={activeOverlay} 
         onOverlayChange={setActiveOverlay}
-        onOpenSettings={() => setIsApiKeyModalOpen(true)}
       />
 
       <AnimatePresence>
@@ -286,6 +274,7 @@ export default function App() {
             activeOverlay={activeOverlay} 
             onClose={() => setActiveOverlay(null)} 
             memories={memories}
+            onDeleteMemory={deleteMemory}
             albums={albums}
             onUpdateAlbums={updateAlbums}
             onUpdateAlbumTitle={updateAlbumTitle}
@@ -296,62 +285,6 @@ export default function App() {
             isSorting={isSorting}
             onAddMemoryAtDate={handleAddMemoryAtDate}
           />
-        )}
-      </AnimatePresence>
-
-      {/* API Key Modal */}
-      <AnimatePresence>
-        {isApiKeyModalOpen && (
-          <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-cream p-8 rounded-sm shadow-2xl max-w-md w-full border border-brown/20 relative"
-            >
-              <button 
-                onClick={() => setIsApiKeyModalOpen(false)}
-                className="absolute top-4 right-4 text-brown/40 hover:text-brown transition-colors"
-              >
-                ✕
-              </button>
-              <h2 className="font-serif text-2xl text-dark-brown mb-4">Groq AI Settings</h2>
-              <p className="font-classic italic text-brown mb-6">Provide your Groq API key to enable AI-powered features like album sorting and smart search. Groq is free and works globally.</p>
-              
-              <div className="space-y-4">
-                <div>
-                  <label className="block font-hand text-sm text-brown mb-1">Your API Key</label>
-                  <input 
-                    type="password"
-                    value={apiKey}
-                    onChange={(e) => setApiKey(e.target.value)}
-                    placeholder="Paste your key here..."
-                    className="w-full bg-white/50 border border-brown/20 p-3 rounded-sm font-mono text-sm focus:outline-none focus:border-moss"
-                  />
-                </div>
-                <div className="flex gap-2">
-                  <button 
-                    onClick={() => saveApiKey(apiKey)}
-                    className="flex-1 py-3 bg-moss text-cream font-hand text-lg tracking-wider rounded-sm hover:bg-dark-brown transition-colors"
-                  >
-                    Save Key
-                  </button>
-                  {localStorage.getItem('REMINIQ_GROQ_API_KEY') && (
-                    <button 
-                      onClick={clearApiKey}
-                      className="px-4 py-3 bg-red-900/10 text-red-900 font-hand text-lg rounded-sm hover:bg-red-900/20 transition-colors"
-                    >
-                      Clear
-                    </button>
-                  )}
-                </div>
-                <p className="text-[10px] text-brown/40 text-center">
-                  Your key is stored locally in your browser and never sent to our servers.
-                  Get a free key at <a href="https://console.groq.com/keys" target="_blank" className="underline">console.groq.com/keys</a>.
-                </p>
-              </div>
-            </motion.div>
-          </div>
         )}
       </AnimatePresence>
 

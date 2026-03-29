@@ -10,6 +10,7 @@ interface ExtraPagesProps {
   activeOverlay: string | null;
   onClose: () => void;
   memories: Memory[];
+  onDeleteMemory: (memoryId: string) => void;
   albums: Album[];
   onUpdateAlbums: (albums: Album[]) => void;
   onUpdateAlbumTitle: (albumId: string, newTitle: string) => void;
@@ -25,6 +26,7 @@ export default function ExtraPages({
   activeOverlay, 
   onClose, 
   memories,
+  onDeleteMemory,
   albums,
   onUpdateAlbums,
   onUpdateAlbumTitle,
@@ -198,6 +200,7 @@ export default function ExtraPages({
             onUpdateDayReaction={onUpdateDayReaction}
             onClose={onClose}
             onAddMemoryAtDate={onAddMemoryAtDate}
+            onDeleteMemory={onDeleteMemory}
           />
         )}
 
