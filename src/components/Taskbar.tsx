@@ -28,7 +28,7 @@ export default function Taskbar({ view, onViewChange, activeOverlay, onOverlayCh
   ];
 
   return (
-    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[9999] flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 bg-parchment/80 backdrop-blur-xl border border-light-brown/30 rounded-full shadow-2xl pointer-events-auto max-w-[95vw] overflow-x-auto no-scrollbar">
+    <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[9999] flex items-center gap-4 sm:gap-6 px-6 sm:px-8 py-3 sm:py-4 bg-parchment/80 backdrop-blur-xl border border-light-brown/30 rounded-full shadow-2xl pointer-events-auto max-w-[95vw] overflow-x-auto no-scrollbar">
       {items.map((item) => {
         const isActive = activeOverlay === item.id;
         
@@ -38,16 +38,16 @@ export default function Taskbar({ view, onViewChange, activeOverlay, onOverlayCh
             onClick={() => {
               onOverlayChange(activeOverlay === item.id ? null : item.id);
             }}
-            className={`relative group flex flex-col items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full transition-all flex-shrink-0 ${
+            className={`relative group flex flex-col items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full transition-all flex-shrink-0 ${
               isActive 
                 ? 'bg-moss text-cream shadow-inner' 
                 : 'text-brown hover:bg-brown/10'
             }`}
           >
-            <div className="scale-90 sm:scale-100">
+            <div className="scale-100 sm:scale-110 transition-transform group-hover:scale-125">
               {item.icon}
             </div>
-            <span className="absolute -top-10 left-1/2 -translate-x-1/2 px-2 py-1 bg-moss text-cream text-[10px] font-hand rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap hidden sm:block">
+            <span className="absolute -top-12 left-1/2 -translate-x-1/2 px-3 py-1.5 bg-moss text-cream text-[11px] tracking-wide font-hand rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none whitespace-nowrap hidden sm:block shadow-md">
               {item.label}
             </span>
             {isActive && (

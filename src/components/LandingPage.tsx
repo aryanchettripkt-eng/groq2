@@ -244,7 +244,7 @@ export default function LandingPage({ onEnterVault, memories }: LandingPageProps
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="inline-block font-hand text-sm text-moss bg-moss/10 border border-moss/30 px-3.5 py-1 rounded-full mb-6 tracking-widest"
+            className="inline-block font-hand text-sm text-moss bg-moss/10 border border-moss/30 px-4 py-1.5 rounded-full mb-10 tracking-widest shadow-[0_2px_10px_rgba(138,158,123,0.1)]"
           >
             ✦ a personal memory keeper ✦
           </motion.div>
@@ -253,7 +253,7 @@ export default function LandingPage({ onEnterVault, memories }: LandingPageProps
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
-            className="font-serif text-6xl md:text-8xl font-semibold text-dark-brown leading-[1.05] mb-5"
+            className="font-serif text-6xl md:text-8xl font-semibold text-dark-brown leading-[1.05] mb-8 tracking-tight"
           >
             Reminiq
           </motion.h1>
@@ -262,19 +262,31 @@ export default function LandingPage({ onEnterVault, memories }: LandingPageProps
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.7 }}
-            className="font-classic italic text-xl text-brown leading-relaxed mb-10"
+            className="font-classic italic text-xl sm:text-2xl text-brown leading-relaxed mb-16 opacity-90"
           >
             A place where your memories rest,<br />
             like pressed flowers between old pages.
           </motion.p>
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          {/* Subtle Ambient Dust Motes around buttons */}
+          <motion.div 
+            animate={{ y: [0, -15, 0], opacity: [0.1, 0.4, 0.1] }}
+            transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+            className="absolute top-[60%] left-[20%] w-2 h-2 rounded-full bg-light-brown blur-[1px] pointer-events-none"
+          />
+          <motion.div 
+            animate={{ y: [0, 20, 0], opacity: [0.2, 0.5, 0.2] }}
+            transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+            className="absolute top-[80%] right-[25%] w-3 h-3 rounded-full bg-moss blur-[2px] pointer-events-none"
+          />
+
+          <div className="flex flex-col sm:flex-row gap-6 sm:gap-8 justify-center items-center relative z-10">
             <motion.button 
               onClick={onEnterVault}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.9 }}
-              className="inline-block px-9 py-3.5 bg-moss text-cream font-hand text-lg tracking-wider rounded-[2px] relative transition-all hover:bg-dark-brown hover:translate-x-[-2px] hover:translate-y-[-2px] shadow-[3px_3px_0_var(--color-light-brown),6px_6px_0_rgba(138,158,123,0.3)] hover:shadow-[5px_5px_0_var(--color-light-brown),8px_8px_0_rgba(138,158,123,0.3)]"
+              className="inline-block px-12 py-4 bg-moss text-cream font-hand text-xl tracking-wider rounded-[3px] relative transition-all hover:bg-dark-brown hover:translate-x-[-3px] hover:translate-y-[-3px] shadow-[4px_4px_0_var(--color-light-brown),8px_8px_0_rgba(138,158,123,0.2)] hover:shadow-[6px_6px_0_var(--color-light-brown),12px_12px_0_rgba(138,158,123,0.2)]"
             >
               ✦ Open the Journal ✦
             </motion.button>
@@ -285,9 +297,9 @@ export default function LandingPage({ onEnterVault, memories }: LandingPageProps
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.0 }}
-              className="inline-flex items-center justify-center gap-2 px-9 py-3.5 bg-white text-dark-brown font-hand text-lg tracking-wider rounded-[2px] border border-light-brown/30 transition-all hover:bg-cream hover:translate-x-[-2px] hover:translate-y-[-2px] shadow-[3px_3px_0_var(--color-light-brown),6px_6px_0_rgba(138,158,123,0.1)] hover:shadow-[5px_5px_0_var(--color-light-brown),8px_8px_0_rgba(138,158,123,0.1)] disabled:opacity-50"
+              className="inline-flex items-center justify-center gap-3 px-12 py-4 bg-white/90 backdrop-blur-sm text-dark-brown font-hand text-xl tracking-wider rounded-[3px] border border-light-brown/20 transition-all hover:bg-cream hover:translate-x-[-3px] hover:translate-y-[-3px] shadow-[4px_4px_0_var(--color-light-brown),8px_8px_0_rgba(138,158,123,0.05)] hover:shadow-[6px_6px_0_var(--color-light-brown),12px_12px_0_rgba(138,158,123,0.1)] disabled:opacity-50"
             >
-              <Camera size={20} className={isSyncing ? "animate-spin" : ""} />
+              <Camera size={22} className={isSyncing ? "animate-spin opacity-70" : "opacity-70"} />
               {isSyncing ? "Syncing..." : "Sync Google Photos"}
             </motion.button>
           </div>
